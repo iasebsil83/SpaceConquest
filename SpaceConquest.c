@@ -2498,6 +2498,7 @@ void gestionEvenement(EvenementGfx evenement){
 			inventory[2][4].id = 15; //rocket
 			inventory[3][0].id = 16; //fruit
 			inventory[3][1].id = 17; //oxygen generator
+			inventory[3][2].id = 18; //furniture
 			*/
 		break;
 		case Temporisation:
