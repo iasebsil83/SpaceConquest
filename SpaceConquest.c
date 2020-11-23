@@ -8,6 +8,8 @@
 	Developped by I.A. using GfxLib :
 	Project developped for ISEN Toulon, an Yncrea Mediterranee engineering school
 
+	This project was made for an ISEN Engineering challenge at the end of 2018.
+
 	24/01/2019 > [0.1.0]_Beta3 :
 		DONE_LAST_TIME{
 			- Added furniture item (Menu, Display, Keypad, MouseClick, Sprites)
