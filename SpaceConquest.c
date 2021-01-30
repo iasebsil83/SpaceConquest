@@ -1,8 +1,8 @@
 #include <stdlib.h> //To use exit()
 #include <stdio.h>  //To use printf()
 #include <math.h>   //To use sin() et cos()
-#include "GfxLib.h" //graphics
-#include "ESLib.h"  //To use valeurAleatoire()
+#include "src/GfxLib.h" //graphics
+#include "src/ESLib.h"  //To use valeurAleatoire()
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Space Conquest ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Developped by I.A. using GfxLib :
@@ -1716,7 +1716,7 @@ void KeypadMegaSwitch(){
 							pAngle -= pAngleStep;
 							if(pAngle < 0)
 								pAngle += M_2PI;
-								pRight = false;
+							pRight = false;
 							pRunningCnt = pRunningCntMax;
 							if(pRunning == 0)
 								pRunning = 1;
@@ -2417,7 +2417,7 @@ void MouseMoveMegaSwitch(){
 // ======================== MAIN ===========================
 int main(int argc, char **argv){
 	initialiseGfx(argc, argv);
-	prepareFenetreGraphique("Space Conquest [0.1.0]", 1600, 900);	
+	prepareFenetreGraphique("Space Conquest [0.1.0]", 1600, 900);
 	activeGestionDeplacementPassifSouris();
 	//launch exeloop
 	lanceBoucleEvenements();
@@ -2434,7 +2434,7 @@ void gestionEvenement(EvenementGfx evenement){
 			setSprites();
 			//set sun
 			g.sun.x = 800; g.sun.y = 450; g.sun.r = 30;
-			//set stars			
+			//set stars
 			g.nbrStars = 2+rnd(14);
 			for(short int s=0; s < g.nbrStars; s++){
 				//set position thanks to radius and angle (theta)
