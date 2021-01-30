@@ -1,7 +1,7 @@
 -------------------- Space Conquest --------------------
 
-Space conquest is a simple 2D game made in C using the
-Ghislain OUDINET's GfxLib.
+Space conquest is a simple 2D game made in C and then
+adaptated with S2DE.
 
 It is a sandbox-like game. You begin your adventure on a
 planet and try to catch the more ressources you can.
