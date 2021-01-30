@@ -14,7 +14,7 @@
 
 
 //graphics
-#include "S2DE.h"
+#include "src/S2DE.h"
 #define S2DE_littleText(t,s,x,y) S2DE_text(t,(s)/120.f,x,y)
 
 
