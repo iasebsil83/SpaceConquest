@@ -22,12 +22,6 @@ or
 
 
 
-You can also see the sprites of this project in a more common format
-in the branch :
-https://github.com/iasebsil83/SpaceConquest/tree/all_sprites
-
-
-
 Contact     : i.a.sebsil83@gmail.com
 Youtube     : https://www.youtube.com/user/IAsebsil83
 GitHub repo : https://github.com/iasebsil83
