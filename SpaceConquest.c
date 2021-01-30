@@ -1,39 +1,74 @@
-#include <stdlib.h> //To use exit()
-#include <stdio.h>  //To use printf()
-#include <math.h>   //To use sin() et cos()
-#include "GfxLib.h" //graphics
-#include "ESLib.h"  //To use valeurAleatoire()
+// ================ IMPORTATIONS ================
+
+//standard
+#include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+
+
+
+//random
+#include <time.h>
+
+
+
+//graphics
+#include "S2DE.h"
+#define S2DE_littleText(t,s,x,y) S2DE_text(t,(s)/120.f,x,y)
+
+
+
+//images
+#include "img.c"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Space Conquest ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Developped by I.A. using GfxLib :
-	Project developped for ISEN Toulon, an Yncrea Mediterranee engineering school
 
-	This project was made for an ISEN Engineering challenge at the end of 2018.
+        Adapted from an older version with S2DE :
+    Project developped for ISEN Toulon, an Yncrea Mediterranee engineering school
 
-	24/01/2019 > [0.1.0]_Beta3 :
-		DONE_LAST_TIME{
-			- Added furniture item (Menu, Display, Keypad, MouseClick, Sprites)
-			- Finished version beta 3
-		}
-		TO_DO{
-			//- Do settings menu (Display, MouseClick, Keypad)
-			//- Make and apply planet sprites (Sprites, Display)
-		}
-		BUGS{
-			//- Rotation of the galaxy is not correct (setGCoo)
-		}
+    This project was made for an ISEN Engineering challenge at the end of 2018.
 
-	WARNING : Pay attention to the GfxLib.c & GfxLib.h, features added !
+    24/01/2019 > [0.1.0]_Beta3 :
+        DONE_LAST_TIME{
+            - Added furniture item (Menu, Display, Keypad, MouseClick, Sprites)
+            - Finished version beta 3
+        }
+        TO_DO{
+            //- Do settings menu (Display, MouseClick, Keypad)
+            //- Make and apply planet sprites (Sprites, Display)
+        }
+        BUGS{
+            //- Rotation of the galaxy is not correct (setGCoo)
+        }
 
-	Contact : i.a.sebsil83@gmail.com
+    Contact : i.a.sebsil83@gmail.com
 
-	Special thanks to Ghislain Oudinet for the GfxLib : ghislain.oudinet@isen.fr
-	ISEN Toulon : www.isen.fr
+    ISEN Toulon : www.isen.fr
 ******************************************************************************************
 
     LICENCE :
 
-    SpaceConquest
+    SpaceConquest_S2DE
     Copyright (C) 2017  Sebastien SILVANO
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,18 +84,42 @@
     If not, see <https://www.gnu.org/licenses/>.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ================= TYPE DEFINITIONS =====================
+
+//objects (inventory)
 typedef struct obj{
 	unsigned short int id;
 	int data;
 }obj;
 
+
+
+//space
 typedef struct planet{
 	int x,y;
 	obj objects[16]; //16 objects for the maximum size
 	short int size, type;
-	//size : { 0:6_divisions, 1:8_divisions, 2:12_divisions, 3:16_divisions }
-	//type : { 0:grasss, 1:rock, 2:red_dirt, 3:sand, 4:lava, 5:ice, 6:diamond }
+	//size : { 0:6_divisions, 1:8_divisions, 2:12_divisions, 3:16_divisions                          }
+	//type : { 0:grasss,      1:rock,        2:red_dirt,     3:sand,        4:lava, 5:ice, 6:diamond }
 	bool atm;
 }planet;
 
@@ -73,6 +132,23 @@ typedef struct galaxy{
 	planet planets[10];
 	star sun, stars[16];
 }galaxy;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -95,8 +171,14 @@ const float M_7PI4 = 7*M_PI/4;
 static img voidImg;
 static img yncrea;
 static img ISEN;
+
+
+
 //fire
 static img fire;
+
+
+
 //player
 static img playerR_stop;
 static img playerR_run1;
@@ -104,6 +186,9 @@ static img playerR_run2;
 static img playerL_stop;
 static img playerL_run1;
 static img playerL_run2;
+
+
+
 //player with space suit
 static img playerSuitR_stop;
 static img playerSuitR_run1;
@@ -111,20 +196,26 @@ static img playerSuitR_run2;
 static img playerSuitL_stop;
 static img playerSuitL_run1;
 static img playerSuitL_run2;
+
+
+
 //icons
-static img icon_inv;	static img icon_crafts;
-static img icon_equip;	static img icon_space;
+static img icon_inv;   static img icon_crafts;
+static img icon_equip; static img icon_space;
+
+
+
 //Items
-static img item_tree;		 static img item_wood;
-static img item_fiber;		 static img item_space_suit;
-static img item_multi_tool;	 static img item_pickaxe;
-static img item_rock;		 static img item_iron;
-static img item_screwdriver; static img item_hammer;
-static img item_oxygen_tank; static img item_machine_base;
-static img item_fuel_maker;	 static img item_fuel;
-static img item_rocket;		 static img item_rocket_high;
-static img item_fruit;		 static img item_oxygen_generator;	static img item_oxygen_generator_tanked;
-static img item_furniture;
+static img item_tree;                    static img item_wood;
+static img item_fiber;                   static img item_space_suit;
+static img item_multi_tool;              static img item_pickaxe;
+static img item_rock;                    static img item_iron;
+static img item_screwdriver;             static img item_hammer;
+static img item_oxygen_tank;             static img item_machine_base;
+static img item_fuel_maker;              static img item_fuel;
+static img item_rocket;                  static img item_rocket_high;
+static img item_fruit;                   static img item_oxygen_generator;
+static img item_oxygen_generator_tanked; static img item_furniture;
 
 //game vars
 static short int menu = 0; //0:start_menu, 1:start_settings, 2:planet, 3:inventory, 4:space
@@ -133,14 +224,17 @@ static short int focus = 0;
 // menu = 0 : start_menu {}
 // menu = 1 : start_settings {}
 // menu = 2 : planet {
-//				  0:player_moving,			1:put_down_item,		2:options_panel1,
-//				  3:options_panel2[crafts], 4:options_panel2[equip]
-//			  }
-// menu = 3 : inventory { 0:no_selection, 1:item_selected, 2:message_delete }
-// menu = 4 : space { 0:galaxy_view, 1:error_message }
-// menu = 5 : rocket_animation { 0:player_moving, 1:fire, 2:take_off }
-// menu = 6 : furnitures { 0:no_selection, 1:item_selected, 2:message_delete }
+//    0:player_moving,          1:put_down_item,        2:options_panel1,
+//    3:options_panel2[crafts], 4:options_panel2[equip]
+//}
+// menu = 3 : inventory        { 0:no_selection,  1:item_selected, 2:message_delete }
+// menu = 4 : space            { 0:galaxy_view,   1:error_message                   }
+// menu = 5 : rocket_animation { 0:player_moving, 1:fire,          2:take_off       }
+// menu = 6 : furnitures       { 0:no_selection,  1:item_selected, 2:message_delete }
 static galaxy g;
+
+
+
 //planet
 static short int planetRow = 0;
 static float plRadius;
@@ -161,30 +255,32 @@ static int oCoo[16][2]; //objects
 static bool tStates[16]; //if mouse is in triangle
 static short int hitDiv; //division of the hit ground
 //objects
-const char objectsName[19][20] = {
-	"",				"Tree",
-	"Wood",			"Fiber",
-	"Space suit",	"Multi tool",
-	"Pickaxe",		"Rock",
-	"Iron",			"Screwdriver",
-	"Hammer",		"Oxygen tank",
+char objectsName[19][20] = {
+	"",             "Tree",
+	"Wood",         "Fiber",
+	"Space suit",   "Multi tool",
+	"Pickaxe",      "Rock",
+	"Iron",         "Screwdriver",
+	"Hammer",       "Oxygen tank",
 	"Machine base", "Fuel maker",
-	"Fuel",			"Rocket",
-	"Fruit",		"Oxygen generator",
+	"Fuel",         "Rocket",
+	"Fruit",        "Oxygen generator",
 	"Furniture"
 };
 // ------- objects references -------
-//  0 : nothing		  1 : tree
-//  2 : wood		  3 : fiber
-//  4 : space suit	  5 : multi tool
-//  6 : pickaxe		  7 : rock
-//  8 : iron		  9 : screwdriver
-// 10 : hammer		 11 : oxygen tank
+//  0 : nothing       1 : tree
+//  2 : wood          3 : fiber
+//  4 : space suit    5 : multi tool
+//  6 : pickaxe       7 : rock
+//  8 : iron          9 : screwdriver
+// 10 : hammer       11 : oxygen tank
 // 12 : machine base 13 : fuel maker
-// 14 : fuel		 15 : rocket
-// 16 : fruit		 17 : oxygen generator (oxygen generator data = (oxygen tank charging) ? oxygen tank data + 1 : 0)
+// 14 : fuel         15 : rocket
+// 16 : fruit        17 : oxygen generator (oxygen generator data = (oxygen tank charging) ? oxygen tank data + 1 : 0)
 // 18 : furniture
-//
+
+
+
 //interface
 static obj inventory[5][5]; //inventory[0] is hotbar
 static short int hotbarSel = 0; //hotbar selection
@@ -198,26 +294,47 @@ const short int stockMax = 5;
 static short int stockSel = 0;
 static short int craftedStocks = 0;
 static bool fromInv = false;
+
+
+
 //life
 static int life = 30;
 const int lifeMax = 30; //1 minute to die (time reference : gAngleCnt)
+
+
+
 //oxygen
 const int oxygenTankMax = 150; //5 minutes (time reference : gAngleCnt)
 static int ownOxygen = 15;
 const int ownOxygenMax = 15; //30 seconds (time reference : gAngleCnt)
+
+
+
 //space visualisation
 static float gAngle = 0;
 const float gAngleStep = 0.0001;
 static int gAngleCnt = 0;
 const int gAngleCntMax = 80; //2 seconds (time reference : real)
 static short int planetSel = -1; //no planet selected
+
+
+
 //hit the ground
 static unsigned short int hitCnt = 0;
 const unsigned short int hitCntMax = 40; //1 second (time reference : real)
+
+
+
 //tools
 const unsigned short int toolsDurability = 60; //number of uses
+
+
+
 //fuel maker
 const short int fuelMakerMax = 5; //10 seconds (time reference : gAngleCnt)
+
+
+
 //rocket
 const short int rocketFuelMax = 8;
 static int rocketAnimCnt = 0;
@@ -227,22 +344,52 @@ const float rocketDistanceStep = 10.f;
 
 
 
-// ===================== FUNCTIONS ========================
+//S2DE external variables
+extern int S2DE_keyState;
+extern short S2DE_key;
+extern int S2DE_mouseState;
+extern int S2DE_mouseButton;
+extern int S2DE_mouseX;
+extern int S2DE_mouseY;
 
-//Usefull functions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ===================== UTILITIES ========================
+
+//Utilities
 int rnd(int n){ //return random number between 0 and n equitably
-	float v = n*valeurAleatoire();
+	float v = rand() % n;
 	if(v-(int)v >= 0.5)
 		return (int)(v+1);
 	else
 		return (int)v;
 }
+
 bool inZone(float x,float y,float xmin,float ymin,float xmax,float ymax){
 	return (x <= xmax && x >= xmin && y <= ymax && y >= ymin);
 }
+
 float norme(float x1,float y1, float x2,float y2){
 	return sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) );
 }
+
 float area(float x1,float y1, float x2,float y2, float x3,float y3){
 	float n12 = norme(x1,y1,x2,y2);
 	float n23 = norme(x2,y2,x3,y3);
@@ -250,6 +397,7 @@ float area(float x1,float y1, float x2,float y2, float x3,float y3){
 	float p = ( n12+n23+n31 )/2; //semi-perimeter
 	return sqrt( p*(p-n12)*(p-n23)*(p-n31) ); //Heron formula
 }
+
 bool inTriangle(float x,float y, float x1,float y1, float x2,float y2, float x3,float y3){
 	float areaTot = area(x1,y1, x2,y2, x3,y3);
 	float areas = area(x,y, x1,y1, x2,y2)
@@ -258,6 +406,8 @@ bool inTriangle(float x,float y, float x1,float y1, float x2,float y2, float x3,
 	return (areaTot-10 <= areas && areas <= areaTot+10);
 }
 
+
+
 //game functions
 short int getDiv(){
 	short int d = 4*g.planets[planetRow].size;
@@ -265,17 +415,20 @@ short int getDiv(){
 		return 6;
 	return d;
 }
+
 void setPlayerCoo(){
 	cosA = cos(pAngle);
 	sinA = sin(pAngle);
 	pCoo[0] = maxl/2 + (plRadius+100)*sinA;
 	pCoo[1] = maxh/2 + (plRadius+100)*cosA;
 }
+
 void setP1Coo(){
 	p1Coo[0] = (pAngle > M_PI) ? -270 : 100;
 	p1Coo[0] += pCoo[0];
 	p1Coo[1] = pCoo[1] - 100;
 }
+
 void setP2Coo(){
 	if(pAngle > M_PI)
 		p2Coo[0] = p1Coo[0] - 350;
@@ -284,6 +437,7 @@ void setP2Coo(){
 	p2Coo[1] = p1Coo[1] + 170;
 	craftPage = 0;
 }
+
 void setTCoo(){ //put_down_item : set the two points out of the triangle for each of them
 	short int div = getDiv(); //the last is the center of the window
 	float da = M_2PI/div;
@@ -296,6 +450,7 @@ void setTCoo(){ //put_down_item : set the two points out of the triangle for eac
 		tCoo[i][1][1] = 450 + plRadius*cos(angle+da);
 	}
 }
+
 void setOCoo(){
 	short int div = getDiv();
 	float angle;
@@ -306,7 +461,9 @@ void setOCoo(){
 		oCoo[i][1] = 450 + (plRadius+30)*cos(angle);
 	}
 }
+
 void setPlanet(){
+
 	//set radius
 	if(g.planets[planetRow].size == 1)
 		plRadius = 45;
@@ -317,10 +474,12 @@ void setPlanet(){
 	else if(g.planets[planetRow].size == 4)
 		plRadius = 258;
 	setPlayerCoo();
+
 	//set planet objects positions (thanks to tCoo & oCoo)
 	setTCoo();
 	setOCoo();
 }
+
 void setGCoo(){
 	float cosA = cos(gAngle);
 	float sinA = sin(gAngle);
@@ -338,6 +497,7 @@ void setGCoo(){
 		g.stars[s].y = 450 + tempx*sinA + tempy*cosA;
 	}
 }
+
 short int checkForObject(unsigned short int id){
 	float div = getDiv();
 	for(short int i=0; i < div; i++){
@@ -346,6 +506,7 @@ short int checkForObject(unsigned short int id){
 	}
 	return -1;
 }
+
 short int checkForRocket(){
 	float div = getDiv();
 	for(short int i=0; i < div; i++){
@@ -356,6 +517,7 @@ short int checkForRocket(){
 	}
 	return -1;
 }
+
 int invCountItem(unsigned short i){
 	unsigned short int cnt = 0;
 	for(short int y=0; y < 5; y++){
@@ -366,6 +528,7 @@ int invCountItem(unsigned short i){
 	}
 	return cnt;
 }
+
 void delInInv(unsigned short int i){
 	for(short int y=0; y < 5; y++){
 		for(short int x=0; x < 5; x++){
@@ -377,6 +540,7 @@ void delInInv(unsigned short int i){
 		}
 	}
 }
+
 void addInInv(unsigned short int id, int data){
 	for(short int y=0; y < 5; y++){
 		for(short int x=0; x < 5; x++){
@@ -388,6 +552,7 @@ void addInInv(unsigned short int id, int data){
 		}
 	}
 }
+
 void tryToPutDown(unsigned short int n, unsigned short int total){
 	if(n != 0){
 		if(g.planets[planetRow].objects[(int)(n-1)].id != 13){ //if not at the left of a fuel maker
@@ -406,35 +571,39 @@ void tryToPutDown(unsigned short int n, unsigned short int total){
 	}
 }
 
+
+
 //Extensible game functions
 void setPlColor(planet p){
 	switch(p.type){
 		case 0: //grass
-			couleurCourante(0,200,0);
+			S2DE_setColor(0,200,0);
 		break;
 		case 1: //rock
-			couleurCourante(210,210,210);
+			S2DE_setColor(210,210,210);
 		break;
 		case 2: //red_dirt
-			couleurCourante(255,50,0);
+			S2DE_setColor(255,50,0);
 		break;
 		case 3: //sand
-			couleurCourante(255,155,0);
+			S2DE_setColor(255,155,0);
 		break;
 		case 4: //lava
-			couleurCourante(255,0,0);
+			S2DE_setColor(255,0,0);
 		break;
 		case 5: //ice
-			couleurCourante(100,180,180);
+			S2DE_setColor(100,180,180);
 		break;
 		case 6: //diamond
-			couleurCourante(255,255,255);
+			S2DE_setColor(255,255,255);
 		break;
 	}
 }
+
 void setSprites(){
 	voidImg.width = 0; voidImg.height = 0;
 	voidImg.data = NULL;
+
 	//yncrea - ISEN
 	yncrea.width = 227;	yncrea.height = 250;
 	yncrea.data = NULL;
@@ -442,11 +611,14 @@ void setSprites(){
 	ISEN.width = 724; ISEN.height = 200;
 	ISEN.data = NULL;
 	ISEN = readRGBA2ARVB("Sprites/ISEN[724x200].rgba",ISEN);
+
 	//fire
 	fire.width = 60; fire.height = 60;
 	fire.data = NULL;
 	fire = readRGBA2ARVB("Sprites/fire[60x60].rgba",fire);
+
 	//player
+
 	//playerR
 	playerR_stop.width = 100; playerR_stop.height = 200;
 	playerR_stop.data = NULL;
@@ -457,6 +629,7 @@ void setSprites(){
 	playerR_run2.width = 100; playerR_run2.height = 200;
 	playerR_run2.data = NULL;
 	playerR_run2 = readRGBA2ARVB("Sprites/playerR_run2[100x200].rgba",playerR_run2);
+
 	//playerL
 	playerL_stop.width = 100; playerL_stop.height = 200;
 	playerL_stop.data = NULL;
@@ -467,7 +640,9 @@ void setSprites(){
 	playerL_run2.width = 100; playerL_run2.height = 200;
 	playerL_run2.data = NULL;
 	playerL_run2 = readRGBA2ARVB("Sprites/playerL_run2[100x200].rgba",playerL_run2);
+
 	//player with space suit
+
 	//playerSuitR
 	playerSuitR_stop.width = 100; playerSuitR_stop.height = 200;
 	playerSuitR_stop.data = NULL;
@@ -478,6 +653,7 @@ void setSprites(){
 	playerSuitR_run2.width = 100; playerSuitR_run2.height = 200;
 	playerSuitR_run2.data = NULL;
 	playerSuitR_run2 = readRGBA2ARVB("Sprites/playerSuitR_run2[100x200].rgba",playerSuitR_run2);
+
 	//playerSuitL
 	playerSuitL_stop.width = 100; playerSuitL_stop.height = 200;
 	playerSuitL_stop.data = NULL;
@@ -488,6 +664,7 @@ void setSprites(){
 	playerSuitL_run2.width = 100; playerSuitL_run2.height = 200;
 	playerSuitL_run2.data = NULL;
 	playerSuitL_run2 = readRGBA2ARVB("Sprites/playerSuitL_run2[100x200].rgba",playerSuitL_run2);
+
 	//icons
 	icon_inv.width = 70; icon_inv.height = 70;
 	icon_inv.data = NULL;
@@ -501,75 +678,94 @@ void setSprites(){
 	icon_space.width = 70; icon_space.height = 70;
 	icon_space.data = NULL;
 	icon_space = readRGBA2ARVB("Sprites/icon_space[70x70].rgba",icon_space);
+
 	//items
+
 	//tree
 	item_tree.width = 60; item_tree.height = 60;
 	item_tree.data = NULL;
 	item_tree = readRGBA2ARVB("Sprites/item_tree[60x60].rgba",item_tree);
+
 	//wood
 	item_wood.width = 60; item_wood.height = 60;
 	item_wood.data = NULL;
 	item_wood = readRGBA2ARVB("Sprites/item_wood[60x60].rgba",item_wood);
+
 	//fiber
 	item_fiber.width = 60; item_fiber.height = 60;
 	item_fiber.data = NULL;
 	item_fiber = readRGBA2ARVB("Sprites/item_fiber[60x60].rgba",item_fiber);
+
 	//space suit
 	item_space_suit.width = 60; item_space_suit.height = 60;
 	item_space_suit.data = NULL;
 	item_space_suit = readRGBA2ARVB("Sprites/item_space_suit[60x60].rgba",item_space_suit);
+
 	//multi tool
 	item_multi_tool.width = 60; item_multi_tool.height = 60;
 	item_multi_tool.data = NULL;
 	item_multi_tool = readRGBA2ARVB("Sprites/item_multi_tool[60x60].rgba",item_multi_tool);
+
 	//pickaxe
 	item_pickaxe.width = 60; item_pickaxe.height = 60;
 	item_pickaxe.data = NULL;
 	item_pickaxe = readRGBA2ARVB("Sprites/item_pickaxe[60x60].rgba",item_pickaxe);
+
 	//rock
 	item_rock.width = 60; item_rock.height = 60;
 	item_rock.data = NULL;
 	item_rock = readRGBA2ARVB("Sprites/item_rock[60x60].rgba",item_rock);
+
 	//iron
 	item_iron.width = 60; item_iron.height = 60;
 	item_iron.data = NULL;
 	item_iron = readRGBA2ARVB("Sprites/item_iron[60x60].rgba",item_iron);
+
 	//screwdriver
 	item_screwdriver.width = 60; item_screwdriver.height = 60;
 	item_screwdriver.data = NULL;
 	item_screwdriver = readRGBA2ARVB("Sprites/item_screwdriver[60x60].rgba",item_screwdriver);
+
 	//hammer
 	item_hammer.width = 60; item_hammer.height = 60;
 	item_hammer.data = NULL;
 	item_hammer = readRGBA2ARVB("Sprites/item_hammer[60x60].rgba",item_hammer);
+
 	//oxygen tank
 	item_oxygen_tank.width = 60; item_oxygen_tank.height = 60;
 	item_oxygen_tank.data = NULL;
 	item_oxygen_tank = readRGBA2ARVB("Sprites/item_oxygen_tank[60x60].rgba",item_oxygen_tank);
+
 	//machine_base
 	item_machine_base.width = 60; item_machine_base.height = 60;
 	item_machine_base.data = NULL;
 	item_machine_base = readRGBA2ARVB("Sprites/item_machine_base[60x60].rgba",item_machine_base);
+
 	//fuel maker
 	item_fuel_maker.width = 60; item_fuel_maker.height = 60;
 	item_fuel_maker.data = NULL;
 	item_fuel_maker = readRGBA2ARVB("Sprites/item_fuel_maker[60x60].rgba",item_fuel_maker);
+
 	//fuel
 	item_fuel.width = 60; item_fuel.height = 60;
 	item_fuel.data = NULL;
 	item_fuel = readRGBA2ARVB("Sprites/item_fuel[60x60].rgba",item_fuel);
+
 	//rocket
 	item_rocket.width = 60; item_rocket.height = 60;
 	item_rocket.data = NULL;
 	item_rocket = readRGBA2ARVB("Sprites/item_rocket[60x60].rgba",item_rocket);
+
 	//rocket high
 	item_rocket_high.width = 60; item_rocket_high.height = 160;
 	item_rocket_high.data = NULL;
 	item_rocket_high = readRGBA2ARVB("Sprites/item_rocket_high[60x160].rgba",item_rocket_high);
+
 	//fruit
 	item_fruit.width = 60; item_fruit.height = 60;
 	item_fruit.data = NULL;
 	item_fruit = readRGBA2ARVB("Sprites/item_fruit[60x60].rgba",item_fruit);
+
 	//oxygen generator
 	item_oxygen_generator.width = 60; item_oxygen_generator.height = 60;
 	item_oxygen_generator.data = NULL;
@@ -577,13 +773,16 @@ void setSprites(){
 	item_oxygen_generator_tanked.width = 60; item_oxygen_generator_tanked.height = 60;
 	item_oxygen_generator_tanked.data = NULL;
 	item_oxygen_generator_tanked = readRGBA2ARVB("Sprites/item_oxygen_generator_tanked[60x60].rgba",item_oxygen_generator_tanked);
+
 	//furniture
 	item_furniture.width = 60; item_furniture.height = 60;
 	item_furniture.data = NULL;
 	item_furniture = readRGBA2ARVB("Sprites/item_furniture[60x60].rgba",item_furniture);
 }
+
 img getSprite(int ref){
 	switch(ref){
+
 		//icons
 		case -1:
 			return icon_inv;
@@ -633,175 +832,190 @@ img getSprite(int ref){
 	}
 	return voidImg;
 }
+
 void showCrafts(){
-	couleurCourante(150,150,150);
-	rectangle(p2Coo[0],p2Coo[1],p2Coo[0]+340,p2Coo[1]-315,true);
+	S2DE_setColor(150,150,150);
+	S2DE_rectangle(p2Coo[0],p2Coo[1],p2Coo[0]+340,p2Coo[1]-315,true);
+
 	//first craft base
-	couleurCourante(210,210,210);
-	rectangle(p2Coo[0]+5,p2Coo[1]-5,p2Coo[0]+335,p2Coo[1]-95,true); //base
-	couleurCourante(150,150,150);
-	rectangle(p2Coo[0]+10,p2Coo[1]-10,p2Coo[0]+70,p2Coo[1]-70,true); //item created
-	rectangle(p2Coo[0]+75,p2Coo[1]-10,p2Coo[0]+245,p2Coo[1]-90,true); //items needed
-	rectangle(p2Coo[0]+250,p2Coo[1]-35,p2Coo[0]+330,p2Coo[1]-65,true); //craft button
-	couleurCourante(255,0,0);
-	epaisseurDeTrait(4);
-	afficheChaine("CRAFT",20,p2Coo[0]+255,p2Coo[1]-60);
+	S2DE_setColor(210,210,210);
+	S2DE_rectangle(p2Coo[0]+5,p2Coo[1]-5,p2Coo[0]+335,p2Coo[1]-95,true); //base
+	S2DE_setColor(150,150,150);
+	S2DE_rectangle(p2Coo[0]+10,p2Coo[1]-10,p2Coo[0]+70,p2Coo[1]-70,true); //item created
+	S2DE_rectangle(p2Coo[0]+75,p2Coo[1]-10,p2Coo[0]+245,p2Coo[1]-90,true); //items needed
+	S2DE_rectangle(p2Coo[0]+250,p2Coo[1]-35,p2Coo[0]+330,p2Coo[1]-65,true); //craft button
+	S2DE_setColor(255,0,0);
+	S2DE_setThickness(4);
+	S2DE_littleText("CRAFT",20,p2Coo[0]+255,p2Coo[1]-60);
+
 	//second craft case
-	couleurCourante(210,210,210);
-	rectangle(p2Coo[0]+5,p2Coo[1]-100,p2Coo[0]+335,p2Coo[1]-190,true); //base
-	couleurCourante(150,150,150);
-	rectangle(p2Coo[0]+10,p2Coo[1]-105,p2Coo[0]+70,p2Coo[1]-165,true); //item created
-	rectangle(p2Coo[0]+75,p2Coo[1]-105,p2Coo[0]+245,p2Coo[1]-185,true); //items needed
-	rectangle(p2Coo[0]+250,p2Coo[1]-130,p2Coo[0]+330,p2Coo[1]-160,true); //craft button
-	couleurCourante(255,0,0);
-	epaisseurDeTrait(4);
-	afficheChaine("CRAFT",20,p2Coo[0]+255,p2Coo[1]-155);
+	S2DE_setColor(210,210,210);
+	S2DE_rectangle(p2Coo[0]+5,p2Coo[1]-100,p2Coo[0]+335,p2Coo[1]-190,true); //base
+	S2DE_setColor(150,150,150);
+	S2DE_rectangle(p2Coo[0]+10,p2Coo[1]-105,p2Coo[0]+70,p2Coo[1]-165,true); //item created
+	S2DE_rectangle(p2Coo[0]+75,p2Coo[1]-105,p2Coo[0]+245,p2Coo[1]-185,true); //items needed
+	S2DE_rectangle(p2Coo[0]+250,p2Coo[1]-130,p2Coo[0]+330,p2Coo[1]-160,true); //craft button
+	S2DE_setColor(255,0,0);
+	S2DE_setThickness(4);
+	S2DE_littleText("CRAFT",20,p2Coo[0]+255,p2Coo[1]-155);
+
 	//third craft case
-	couleurCourante(210,210,210);
-	rectangle(p2Coo[0]+5,p2Coo[1]-195,p2Coo[0]+335,p2Coo[1]-285,true); //base
-	couleurCourante(150,150,150);
-	rectangle(p2Coo[0]+10,p2Coo[1]-200,p2Coo[0]+70,p2Coo[1]-260,true); //item created
-	rectangle(p2Coo[0]+75,p2Coo[1]-200,p2Coo[0]+245,p2Coo[1]-280,true); //items needed
-	rectangle(p2Coo[0]+250,p2Coo[1]-225,p2Coo[0]+330,p2Coo[1]-255,true); //craft button
-	couleurCourante(255,0,0);
-	epaisseurDeTrait(4);
-	afficheChaine("CRAFT",20,p2Coo[0]+255,p2Coo[1]-250);
+	S2DE_setColor(210,210,210);
+	S2DE_rectangle(p2Coo[0]+5,p2Coo[1]-195,p2Coo[0]+335,p2Coo[1]-285,true); //base
+	S2DE_setColor(150,150,150);
+	S2DE_rectangle(p2Coo[0]+10,p2Coo[1]-200,p2Coo[0]+70,p2Coo[1]-260,true); //item created
+	S2DE_rectangle(p2Coo[0]+75,p2Coo[1]-200,p2Coo[0]+245,p2Coo[1]-280,true); //items needed
+	S2DE_rectangle(p2Coo[0]+250,p2Coo[1]-225,p2Coo[0]+330,p2Coo[1]-255,true); //craft button
+	S2DE_setColor(255,0,0);
+	S2DE_setThickness(4);
+	S2DE_littleText("CRAFT",20,p2Coo[0]+255,p2Coo[1]-250);
+
 	//down arrow
-	couleurCourante(210,210,210);
-	rectangle(p2Coo[0]+5,p2Coo[1]-290,p2Coo[0]+335,p2Coo[1]-310,true); //base
-	couleurCourante(0,0,0);
-	triangle(p2Coo[0]+157,p2Coo[1]-295,p2Coo[0]+162,p2Coo[1]-305,p2Coo[0]+167,p2Coo[1]-295,true); //arrow
+	S2DE_setColor(210,210,210);
+	S2DE_rectangle(p2Coo[0]+5,p2Coo[1]-290,p2Coo[0]+335,p2Coo[1]-310,true); //base
+	S2DE_setColor(0,0,0);
+	S2DE_triangle(p2Coo[0]+157,p2Coo[1]-295,p2Coo[0]+162,p2Coo[1]-305,p2Coo[0]+167,p2Coo[1]-295,true); //arrow
+
 	//contents
-	epaisseurDeTrait(2);
+	S2DE_setThickness(2);
 	switch(craftPage){
 		case 0:
 			//first craft
-			couleurCourante(0,0,0);
-			afficheChaine("Space suit",12,p2Coo[0]+6,p2Coo[1]-85);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Space suit",12,p2Coo[0]+6,p2Coo[1]-85);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-70, item_space_suit);
-			couleurCourante(255,255,255);
-			afficheChaine("Fiber(x3)",12,p2Coo[0]+77,p2Coo[1]-38);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Fiber(x3)",12,p2Coo[0]+77,p2Coo[1]-38);
+
 			//second craft
-			couleurCourante(0,0,0);
-			afficheChaine("Multi tool",12,p2Coo[0]+11,p2Coo[1]-180);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Multi tool",12,p2Coo[0]+11,p2Coo[1]-180);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-165, item_multi_tool);
-			couleurCourante(255,255,255);
-			afficheChaine("Wood(x1)",12,p2Coo[0]+77,p2Coo[1]-133);
-			afficheChaine("Fiber(x1)",12,p2Coo[0]+77,p2Coo[1]-174);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Wood(x1)",12,p2Coo[0]+77,p2Coo[1]-133);
+			S2DE_littleText("Fiber(x1)",12,p2Coo[0]+77,p2Coo[1]-174);
+
 			//third craft
-			couleurCourante(0,0,0);
-			afficheChaine("Pickaxe",12,p2Coo[0]+18,p2Coo[1]-275);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Pickaxe",12,p2Coo[0]+18,p2Coo[1]-275);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-260, item_pickaxe);
-			couleurCourante(255,255,255);
-			afficheChaine("Multi tool(x1)",12,p2Coo[0]+77,p2Coo[1]-228);
-			afficheChaine("Rock(x2)",12,p2Coo[0]+77,p2Coo[1]-269);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Multi tool(x1)",12,p2Coo[0]+77,p2Coo[1]-228);
+			S2DE_littleText("Rock(x2)",12,p2Coo[0]+77,p2Coo[1]-269);
 		break;
 		case 1:
 			//first craft
-			couleurCourante(0,0,0);
-			afficheChaine("Screwdriver",12,p2Coo[0]+6,p2Coo[1]-85);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Screwdriver",12,p2Coo[0]+6,p2Coo[1]-85);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-70, item_screwdriver);
-			couleurCourante(255,255,255);
-			afficheChaine("Multi tool(x1)",12,p2Coo[0]+77,p2Coo[1]-38);
-			afficheChaine("Iron(x1)",12,p2Coo[0]+77,p2Coo[1]-79);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Multi tool(x1)",12,p2Coo[0]+77,p2Coo[1]-38);
+			S2DE_littleText("Iron(x1)",12,p2Coo[0]+77,p2Coo[1]-79);
+
 			//second craft
-			couleurCourante(0,0,0);
-			afficheChaine("Hammer",12,p2Coo[0]+13,p2Coo[1]-180);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Hammer",12,p2Coo[0]+13,p2Coo[1]-180);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-165, item_hammer);
-			couleurCourante(255,255,255);
-			afficheChaine("Multi tool(x1)",12,p2Coo[0]+77,p2Coo[1]-133);
-			afficheChaine("Iron(x2)",12,p2Coo[0]+77,p2Coo[1]-174);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Multi tool(x1)",12,p2Coo[0]+77,p2Coo[1]-133);
+			S2DE_littleText("Iron(x2)",12,p2Coo[0]+77,p2Coo[1]-174);
+
 			//third craft
-			couleurCourante(0,0,0);
-			afficheChaine("Machine base",9,p2Coo[0]+7,p2Coo[1]-275);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Machine base",9,p2Coo[0]+7,p2Coo[1]-275);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-260, item_machine_base);
-			couleurCourante(255,255,255);
-			afficheChaine("Rock(x2)",12,p2Coo[0]+77,p2Coo[1]-228);
-			afficheChaine("Iron(x2)",12,p2Coo[0]+77,p2Coo[1]-269);
-			afficheChaine("Multi tool(x1)",12,p2Coo[0]+162,p2Coo[1]-228);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Rock(x2)",12,p2Coo[0]+77,p2Coo[1]-228);
+			S2DE_littleText("Iron(x2)",12,p2Coo[0]+77,p2Coo[1]-269);
+			S2DE_littleText("Multi tool(x1)",12,p2Coo[0]+162,p2Coo[1]-228);
 		break;
 		case 2:
 			//first craft
-			couleurCourante(0,0,0);
-			afficheChaine("Fuel maker",11,p2Coo[0]+7,p2Coo[1]-85);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Fuel maker",11,p2Coo[0]+7,p2Coo[1]-85);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-70, item_fuel_maker);
-			couleurCourante(255,255,255);
-			afficheChaine("Machine base(x1)",11,p2Coo[0]+77,p2Coo[1]-38);
-			afficheChaine("Hammer(x1)",12,p2Coo[0]+77,p2Coo[1]-79);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Machine base(x1)",11,p2Coo[0]+77,p2Coo[1]-38);
+			S2DE_littleText("Hammer(x1)",12,p2Coo[0]+77,p2Coo[1]-79);
+
 			//second craft
-			couleurCourante(0,0,0);
-			afficheChaine("Rocket",12,p2Coo[0]+20,p2Coo[1]-180);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Rocket",12,p2Coo[0]+20,p2Coo[1]-180);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-165, item_rocket);
-			couleurCourante(255,255,255);
-			afficheChaine("Machine base(x2)",10,p2Coo[0]+77,p2Coo[1]-133);
-			afficheChaine("Wood(x2)",12,p2Coo[0]+77,p2Coo[1]-174);
-			afficheChaine("Screwdriver(x2)",10,p2Coo[0]+169,p2Coo[1]-133);
-			afficheChaine("Iron(x2)",12,p2Coo[0]+162,p2Coo[1]-174);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Machine base(x2)",10,p2Coo[0]+77,p2Coo[1]-133);
+			S2DE_littleText("Wood(x2)",12,p2Coo[0]+77,p2Coo[1]-174);
+			S2DE_littleText("Screwdriver(x2)",10,p2Coo[0]+169,p2Coo[1]-133);
+			S2DE_littleText("Iron(x2)",12,p2Coo[0]+162,p2Coo[1]-174);
+
 			//third craft
-			couleurCourante(0,0,0);
-			afficheChaine("Oxygen tank",12,p2Coo[0]+6,p2Coo[1]-275);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Oxygen tank",12,p2Coo[0]+6,p2Coo[1]-275);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-260, item_oxygen_tank);
-			couleurCourante(255,255,255);
-			afficheChaine("Iron (x3)",12,p2Coo[0]+77,p2Coo[1]-228);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Iron (x3)",12,p2Coo[0]+77,p2Coo[1]-228);
 		break;
 		case 3:
 			//first craft
-			couleurCourante(0,0,0);
-			afficheChaine("Oxygen generator",10,p2Coo[0]+5,p2Coo[1]-85);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Oxygen generator",10,p2Coo[0]+5,p2Coo[1]-85);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-70, item_oxygen_generator);
-			couleurCourante(0,0,255);
-			point(p2Coo[0]+34,p2Coo[1]-50);
-			couleurCourante(255,255,255);
-			afficheChaine("Machine base(x1)",11,p2Coo[0]+77,p2Coo[1]-38);
-			afficheChaine("Hammer(x2)",12,p2Coo[0]+77,p2Coo[1]-72);
-			afficheChaine("Fiber(x3)",12,p2Coo[0]+178,p2Coo[1]-38);
-			afficheChaine("Fruit(x1)",12,p2Coo[0]+178,p2Coo[1]-72);
+			S2DE_setColor(0,0,255);
+			S2DE_point(p2Coo[0]+34,p2Coo[1]-50);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Machine base(x1)",11,p2Coo[0]+77,p2Coo[1]-38);
+			S2DE_littleText("Hammer(x2)",12,p2Coo[0]+77,p2Coo[1]-72);
+			S2DE_littleText("Fiber(x3)",12,p2Coo[0]+178,p2Coo[1]-38);
+			S2DE_littleText("Fruit(x1)",12,p2Coo[0]+178,p2Coo[1]-72);
+
 			//second craft
-			couleurCourante(0,0,0);
-			afficheChaine("Furniture",12,p2Coo[0]+8,p2Coo[1]-180);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Furniture",12,p2Coo[0]+8,p2Coo[1]-180);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-165, item_furniture);
-			couleurCourante(255,255,255);
-			afficheChaine("Iron(x4)",12,p2Coo[0]+77,p2Coo[1]-133);
-			afficheChaine("Screwdriver(x1)",12,p2Coo[0]+77,p2Coo[1]-174);
-			couleurCourante(0,0,255);
-			afficheChaine("Only craftable",12,p2Coo[0]+250,p2Coo[1]-120);
-			afficheChaine("5 times",12,p2Coo[0]+270,p2Coo[1]-180);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Iron(x4)",12,p2Coo[0]+77,p2Coo[1]-133);
+			S2DE_littleText("Screwdriver(x1)",12,p2Coo[0]+77,p2Coo[1]-174);
+			S2DE_setColor(0,0,255);
+			S2DE_littleText("Only craftable",12,p2Coo[0]+250,p2Coo[1]-120);
+			S2DE_littleText("5 times",12,p2Coo[0]+270,p2Coo[1]-180);
 		break;
 		/* patern for new craft pages
 		case n:
 			//first craft
-			couleurCourante(0,0,0);
-			afficheChaine("Element1",12,p2Coo[0]+6,p2Coo[1]-85);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Element1",12,p2Coo[0]+6,p2Coo[1]-85);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-70, item_Element1);
-			couleurCourante(255,255,255);
-			afficheChaine("Need 11 (x1)",12,p2Coo[0]+77,p2Coo[1]-38);
-			afficheChaine("Need 12 (x2)",12,p2Coo[0]+77,p2Coo[1]-79);
-			afficheChaine("Need 13 (x3)",12,p2Coo[0]+162,p2Coo[1]-38);
-			afficheChaine("Need 14 (x4)",12,p2Coo[0]+162,p2Coo[1]-79);
-			couleurCourante(0,0,255);
-			afficheChaine("Only craftable",11,p2Coo[0]+252,p2Coo[1]-25);
-			afficheChaine("ONCE",11,p2Coo[0]+273,p2Coo[1]-85);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Need 11 (x1)",12,p2Coo[0]+77,p2Coo[1]-38);
+			S2DE_littleText("Need 12 (x2)",12,p2Coo[0]+77,p2Coo[1]-79);
+			S2DE_littleText("Need 13 (x3)",12,p2Coo[0]+162,p2Coo[1]-38);
+			S2DE_littleText("Need 14 (x4)",12,p2Coo[0]+162,p2Coo[1]-79);
+			S2DE_setColor(0,0,255);
+			S2DE_littleText("Only craftable",11,p2Coo[0]+252,p2Coo[1]-25);
+			S2DE_littleText("ONCE",11,p2Coo[0]+273,p2Coo[1]-85);
+
 			//second craft
-			couleurCourante(0,0,0);
-			afficheChaine("Element2",12,p2Coo[0]+6,p2Coo[1]-180);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Element2",12,p2Coo[0]+6,p2Coo[1]-180);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-165, item_Element2);
-			couleurCourante(255,255,255);
-			afficheChaine("Need 21 (x1)",12,p2Coo[0]+77,p2Coo[1]-133);
-			afficheChaine("Need 22 (x2)",12,p2Coo[0]+77,p2Coo[1]-174);
-			afficheChaine("Need 23 (x3)",12,p2Coo[0]+162,p2Coo[1]-133);
-			afficheChaine("Need 24 (x4)",12,p2Coo[0]+162,p2Coo[1]-174);
-			couleurCourante(0,0,255);
-			afficheChaine("Only craftable",11,p2Coo[0]+252,p2Coo[1]-120);
-			afficheChaine("ONCE",11,p2Coo[0]+273,p2Coo[1]-180);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Need 21 (x1)",12,p2Coo[0]+77,p2Coo[1]-133);
+			S2DE_littleText("Need 22 (x2)",12,p2Coo[0]+77,p2Coo[1]-174);
+			S2DE_littleText("Need 23 (x3)",12,p2Coo[0]+162,p2Coo[1]-133);
+			S2DE_littleText("Need 24 (x4)",12,p2Coo[0]+162,p2Coo[1]-174);
+			S2DE_setColor(0,0,255);
+			S2DE_littleText("Only craftable",11,p2Coo[0]+252,p2Coo[1]-120);
+			S2DE_littleText("ONCE",11,p2Coo[0]+273,p2Coo[1]-180);
+
 			//third craft
-			couleurCourante(0,0,0);
-			afficheChaine("Element3",12,p2Coo[0]+6,p2Coo[1]-275);
+			S2DE_setColor(0,0,0);
+			S2DE_littleText("Element3",12,p2Coo[0]+6,p2Coo[1]-275);
 			ecrisImageIMG(p2Coo[0]+10,p2Coo[1]-260, item_Element3);
-			couleurCourante(255,255,255);
-			afficheChaine("Need 31 (x1)",12,p2Coo[0]+77,p2Coo[1]-228);
-			afficheChaine("Need 32 (x2)",12,p2Coo[0]+77,p2Coo[1]-269);
-			afficheChaine("Need 33 (x3)",12,p2Coo[0]+162,p2Coo[1]-228);
-			afficheChaine("Need 34 (x4)",12,p2Coo[0]+162,p2Coo[1]-269);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Need 31 (x1)",12,p2Coo[0]+77,p2Coo[1]-228);
+			S2DE_littleText("Need 32 (x2)",12,p2Coo[0]+77,p2Coo[1]-269);
+			S2DE_littleText("Need 33 (x3)",12,p2Coo[0]+162,p2Coo[1]-228);
+			S2DE_littleText("Need 34 (x4)",12,p2Coo[0]+162,p2Coo[1]-269);
 		break;
 		*/
 	}
@@ -809,40 +1023,65 @@ void showCrafts(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ==================== MEGASWITCHES =======================
+
+//display
 void DisplayMegaSwitch(){
 	short int div;
 	float angle,angle1,angle2, cosA,sinA,cosA2,sinA2, temp1,temp2;
-	effaceFenetre(0,0,22);
+	S2DE_setColor(0,0,22);
+	S2DE_rectangle(0,0, 1600,900, 1);
 	switch(menu){
+
 		case 0: //start_menu
-			couleurCourante(50,50,100);			
-			rectangle(200,600,1400,700,true); //title + play & settings buttons
-			rectangle(580,300,1020,380,true);
-			//rectangle(620,150,980,200,true);
-			couleurCourante(245,245,245);
-			epaisseurDeTrait(13);
-			afficheChaine("SPACE CONQUEST",90,350,610);
-			epaisseurDeTrait(10);
-			afficheChaine("PLAY",70,700,310);
-			//epaisseurDeTrait(7);
-			//afficheChaine("SETTINGS",40,700,155);
-			epaisseurDeTrait(4);
-			afficheChaine("by I.A.",20,20,20);
-			afficheChaine("[0.1.0]",20,1520,20);
+			S2DE_setColor(50,50,100);
+			S2DE_rectangle(200,600,1400,700,true); //title + play & settings buttons
+			S2DE_rectangle(580,300,1020,380,true);
+			//S2DE_rectangle(620,150,980,200,true);
+			S2DE_setColor(245,245,245);
+			S2DE_setThickness(13);
+			S2DE_littleText("SPACE CONQUEST",90,350,610);
+			S2DE_setThickness(10);
+			S2DE_littleText("PLAY",70,700,310);
+			//S2DE_setThickness(7);
+			//S2DE_littleText("SETTINGS",40,700,155);
+			S2DE_setThickness(4);
+			S2DE_littleText("by I.A.",20,20,20);
+			S2DE_littleText("[0.1.0]",20,1520,20);
 		break;
+
 		case 1: //start_settings
 		break;
+
 		case 2: //planet
+
 			//life
-			couleurCourante(155,0,0);
-			rectangle(0,900,400,885,true);
-			couleurCourante(255,0,0);
-			rectangle(0,900,400*life/lifeMax,885,true);
+			S2DE_setColor(155,0,0);
+			S2DE_rectangle(0,900,400,885,true);
+			S2DE_setColor(255,0,0);
+			S2DE_rectangle(0,900,400*life/lifeMax,885,true);
+
 			//oxygen
-			couleurCourante(0,155,155);
-			rectangle(0,885,400,870,true);
-			couleurCourante(0,255,255);
+			S2DE_setColor(0,155,155);
+			S2DE_rectangle(0,885,400,870,true);
+			S2DE_setColor(0,255,255);
 			temp1 = ownOxygen;
 			temp2 = ownOxygenMax;
 			if(equipment[1].id == 11){
@@ -853,30 +1092,34 @@ void DisplayMegaSwitch(){
 				temp1 += equipment[2].data;
 				temp2 += oxygenTankMax;
 			}
-			rectangle(0,885,400*temp1/temp2,870,true);
+			S2DE_rectangle(0,885,400*temp1/temp2,870,true);
+
 			//both
-			epaisseurDeTrait(2);
-			couleurCourante(255,255,255);
-			afficheChaine("Life",12,405,887);
-			afficheChaine("Oxygen",12,405,872);
+			S2DE_setThickness(2);
+			S2DE_setColor(255,255,255);
+			S2DE_littleText("Life",12,405,887);
+			S2DE_littleText("Oxygen",12,405,872);
+
 			//current planet
 			if(g.planets[planetRow].atm){
-				couleurCourante(0,80,80);
+				S2DE_setColor(0,80,80);
 				circle(800,450,plRadius+300,true,true);
-				epaisseurDeTrait(3);
-				couleurCourante(150,230,230);
+				S2DE_setThickness(3);
+				S2DE_setColor(150,230,230);
 				circle(800,450,plRadius+300,true,false);
 			}
 			setPlColor(g.planets[planetRow]);
 			circle(800,450,plRadius,true,true);
+
 			//ground suffering
 			if(hitCnt > 0){
-				couleurCourante(150,0,0);
-				triangle(800,450,
+				S2DE_setColor(150,0,0);
+				S2DE_triangle(800,450,
 					tCoo[hitDiv][0][0],tCoo[hitDiv][0][1],
 					tCoo[hitDiv][1][0],tCoo[hitDiv][1][1],
 				true);
 			}
+
 			//objects
 			div = getDiv();
 			for(short int i=0; i < div; i++){
@@ -905,17 +1148,17 @@ void DisplayMegaSwitch(){
 						angle2 = angle + M_2PI/div;
 						cosA  = cos(angle1); sinA  = sin(angle1);
 						cosA2 = cos(angle2); sinA2 = sin(angle2);
-						couleurCourante(80,80,80);
-						epaisseurDeTrait(5);
+						S2DE_setColor(80,80,80);
+						S2DE_setThickness(5);
 						if(i == div-1)
-							ligne(
+							S2DE_line(
 								oCoo[i][0]-30*sinA,
 								oCoo[i][1]-30*cosA,
 								oCoo[0][0]-30*sinA2,
 								oCoo[0][1]-30*cosA2
 							);
 						else
-							ligne(
+							S2DE_line(
 								oCoo[i][0]-30*sinA,
 								oCoo[i][1]-30*cosA,
 								oCoo[(int)(i+1)][0]-30*sinA2,
@@ -935,10 +1178,10 @@ void DisplayMegaSwitch(){
 								angle,
 							true);
 							if(g.planets[planetRow].objects[i].data == 1+oxygenTankMax){ //if oxygenTank charged
-								couleurCourante(0,255,0);
+								S2DE_setColor(0,255,0);
 								cosA = cos(angle);
 								sinA = sin(angle);
-								point(
+								S2DE_point(
 									oCoo[i][0]+15*cosA-15*sinA,
 									oCoo[i][1]+15*sinA+15*cosA
 								);
@@ -952,14 +1195,15 @@ void DisplayMegaSwitch(){
 						true);
 				}
 				if(focus == 1){ //put_down_item (triangles)
-					epaisseurDeTrait(3);
-					couleurCourante(0,240,0);
-					triangle(800,450,
+					S2DE_setThickness(3);
+					S2DE_setColor(0,240,0);
+					S2DE_triangle(800,450,
 						tCoo[i][0][0],tCoo[i][0][1],
 						tCoo[i][1][0],tCoo[i][1][1],
 					tStates[i]);
 				}
 			}
+
 			//player
 			if(equipment[0].id == 4){ //player equip a space suit
 				if(pRight){
@@ -1042,65 +1286,74 @@ void DisplayMegaSwitch(){
 						true);
 				}
 			}
+
 			//hotbar
-			couleurCourante(150,150,150);
-			rectangle(640,0,1000,80,true);
-			couleurCourante(90,90,90);
+			S2DE_setColor(150,150,150);
+			S2DE_rectangle(640,0,1000,80,true);
+			S2DE_setColor(90,90,90);
 			for(short int i=0; i < 5; i++){
-				rectangle(650+i*70,10,710+i*70,70,true);
+				S2DE_rectangle(650+i*70,10,710+i*70,70,true);
 				ecrisImageIMG(650+i*70,10, getSprite(inventory[0][i].id));
 			}
+
 			//see if mouse is on a hotbar item (display its name)
 			for(short int i=0; i < 5; i++){
-				if(inZone(abscisseSouris(),ordonneeSouris(),
+				if(inZone(S2DE_mouseX,S2DE_mouseY,
 				   650+i*70,10,710+i*70,70)
 				   && inventory[0][i].id != 0){ //<=> mouse not on void case
-					couleurCourante(255,255,255);
-					epaisseurDeTrait(2);
-					afficheChaine(objectsName[inventory[0][i].id],15,650+i*70,85);
+					S2DE_setColor(255,255,255);
+					S2DE_setThickness(2);
+					S2DE_littleText(objectsName[inventory[0][i].id],15,650+i*70,85);
+
 					//percentages items
 					if(inventory[0][i].id == 6) //pickaxe
-						afficheNombre( (int)(100*inventory[0][i].data/toolsDurability) ,15,710+i*70,85);
+						showNumber( (int)(100*inventory[0][i].data/toolsDurability) ,15,710+i*70,85);
 					else if(inventory[0][i].id == 11) //oxygen tank
-						afficheNombre( (int)(100*inventory[0][i].data/oxygenTankMax) ,15,745+i*70,85);
+						showNumber( (int)(100*inventory[0][i].data/oxygenTankMax) ,15,745+i*70,85);
 					else if(inventory[0][i].id == 15) //rocket
-						afficheNombre( (int)(100*inventory[0][i].data/rocketFuelMax) ,15,700+i*70,85);
+						showNumber( (int)(100*inventory[0][i].data/rocketFuelMax) ,15,700+i*70,85);
 					break;
 				}
 			}
-			epaisseurDeTrait(3);
-			couleurCourante(0,0,255);
-			rectangle(645+hotbarSel*70,5,715+hotbarSel*70,75,false);
+			S2DE_setThickness(3);
+			S2DE_setColor(0,0,255);
+			S2DE_rectangle(645+hotbarSel*70,5,715+hotbarSel*70,75,false);
+
 			//options_panels
 			if(focus >= 2){ //options_panel1 or more
-				couleurCourante(150,150,150);
-				rectangle(p1Coo[0],p1Coo[1],p1Coo[0]+170,p1Coo[1]+170,true);
-				couleurCourante(210,210,210);
+				S2DE_setColor(150,150,150);
+				S2DE_rectangle(p1Coo[0],p1Coo[1],p1Coo[0]+170,p1Coo[1]+170,true);
+				S2DE_setColor(210,210,210);
+
 				//alpha zone : inventory
-				rectangle(p1Coo[0]+10 ,p1Coo[1]+90 ,p1Coo[0]+80,p1Coo[1]+160,true);
+				S2DE_rectangle(p1Coo[0]+10 ,p1Coo[1]+90 ,p1Coo[0]+80,p1Coo[1]+160,true);
 				ecrisImageIMG(p1Coo[0]+10,p1Coo[1]+90, getSprite(-1)); //icon_inventory
+
 				//beta zone : crafts
-				rectangle(p1Coo[0]+90,p1Coo[1]+90 ,p1Coo[0]+160,p1Coo[1]+160,true);
+				S2DE_rectangle(p1Coo[0]+90,p1Coo[1]+90 ,p1Coo[0]+160,p1Coo[1]+160,true);
 				ecrisImageIMG(p1Coo[0]+90,p1Coo[1]+90, getSprite(-2)); //icon_crafts
+
 				//gamma zone : equip
-				rectangle(p1Coo[0]+10 ,p1Coo[1]+10 ,p1Coo[0]+80,p1Coo[1]+80 ,true);
+				S2DE_rectangle(p1Coo[0]+10 ,p1Coo[1]+10 ,p1Coo[0]+80,p1Coo[1]+80 ,true);
 				ecrisImageIMG(p1Coo[0]+10,p1Coo[1]+10, getSprite(-3)); //icon_equip
+
 				//delta zone : space
-				rectangle(p1Coo[0]+90,p1Coo[1]+10 ,p1Coo[0]+160,p1Coo[1]+80 ,true);
+				S2DE_rectangle(p1Coo[0]+90,p1Coo[1]+10 ,p1Coo[0]+160,p1Coo[1]+80 ,true);
 				ecrisImageIMG(p1Coo[0]+90,p1Coo[1]+10, getSprite(-4)); //icon_space
+
 				//options_panel2
 				if(focus == 3) //options_panel2[crafts]
 					showCrafts();
 				else if(focus == 4){ //options_panel2[equip]
-					couleurCourante(150,150,150);
-					rectangle(p2Coo[0],p2Coo[1],p2Coo[0]+340,p2Coo[1]-220,true);
-					couleurCourante(210,210,210);
-					rectangle(p2Coo[0]+5,p2Coo[1]-5,p2Coo[0]+336,p2Coo[1]-215,true);
-					couleurCourante(150,150,150);
-					rectangle(p2Coo[0]+120,p2Coo[1]-10,p2Coo[0]+220,p2Coo[1]-210,true);
-					rectangle(p2Coo[0]+30,p2Coo[1]-80,p2Coo[0]+90,p2Coo[1]-140,true); //space suit
-					rectangle(p2Coo[0]+250,p2Coo[1]-20,p2Coo[0]+310,p2Coo[1]-80,true); //oxygen tank1
-					rectangle(p2Coo[0]+250,p2Coo[1]-130,p2Coo[0]+310,p2Coo[1]-190,true); //oxygen tank2
+					S2DE_setColor(150,150,150);
+					S2DE_rectangle(p2Coo[0],p2Coo[1],p2Coo[0]+340,p2Coo[1]-220,true);
+					S2DE_setColor(210,210,210);
+					S2DE_rectangle(p2Coo[0]+5,p2Coo[1]-5,p2Coo[0]+336,p2Coo[1]-215,true);
+					S2DE_setColor(150,150,150);
+					S2DE_rectangle(p2Coo[0]+120,p2Coo[1]-10,p2Coo[0]+220,p2Coo[1]-210,true);
+					S2DE_rectangle(p2Coo[0]+30,p2Coo[1]-80,p2Coo[0]+90,p2Coo[1]-140,true); //space suit
+					S2DE_rectangle(p2Coo[0]+250,p2Coo[1]-20,p2Coo[0]+310,p2Coo[1]-80,true); //oxygen tank1
+					S2DE_rectangle(p2Coo[0]+250,p2Coo[1]-130,p2Coo[0]+310,p2Coo[1]-190,true); //oxygen tank2
 					if(equipment[0].id == 4){ //if space suit equiped
 						if(pRight)
 							ecrisImageIMG(p2Coo[0]+120,p2Coo[1]-210,playerSuitR_stop);
@@ -1115,125 +1368,139 @@ void DisplayMegaSwitch(){
 					ecrisImageIMG(p2Coo[0]+30,p2Coo[1]-140,getSprite(equipment[0].id)); //space suit
 					ecrisImageIMG(p2Coo[0]+250,p2Coo[1]-80,getSprite(equipment[1].id)); //oxygen tank1
 					ecrisImageIMG(p2Coo[0]+250,p2Coo[1]-190,getSprite(equipment[2].id)); //oxygen tank2
+
 					//show names and percentages
-					if(inZone(abscisseSouris(),ordonneeSouris(), //space suit
+					if(inZone(S2DE_mouseX,S2DE_mouseY, //space suit
 					   p2Coo[0]+30,p2Coo[1]-140,p2Coo[0]+90,p2Coo[1]-80) && equipment[0].id == 4){
-						epaisseurDeTrait(2);
-						couleurCourante(255,255,255);
-						afficheChaine("Space suit",14,p2Coo[0]+25,p2Coo[1]-155);
-					}else if(inZone(abscisseSouris(),ordonneeSouris(), //oxygen tank1
+						S2DE_setThickness(2);
+						S2DE_setColor(255,255,255);
+						S2DE_littleText("Space suit",14,p2Coo[0]+25,p2Coo[1]-155);
+					}else if(inZone(S2DE_mouseX,S2DE_mouseY, //oxygen tank1
 					   p2Coo[0]+250,p2Coo[1]-80,p2Coo[0]+310,p2Coo[1]-20) && equipment[1].id == 11){
-						epaisseurDeTrait(2);
-						couleurCourante(255,255,255);
-						afficheChaine("Oxygen tank",11,p2Coo[0]+222,p2Coo[1]-95);
-						afficheNombre( (int)(100*equipment[1].data/oxygenTankMax) ,11,p2Coo[0]+295,p2Coo[1]-95);
-					}else if(inZone(abscisseSouris(),ordonneeSouris(), //oxygen tank2
+						S2DE_setThickness(2);
+						S2DE_setColor(255,255,255);
+						S2DE_littleText("Oxygen tank",11,p2Coo[0]+222,p2Coo[1]-95);
+						showNumber( (int)(100*equipment[1].data/oxygenTankMax) ,11,p2Coo[0]+295,p2Coo[1]-95);
+					}else if(inZone(S2DE_mouseX,S2DE_mouseY, //oxygen tank2
 					   p2Coo[0]+250,p2Coo[1]-190,p2Coo[0]+310,p2Coo[1]-130) && equipment[2].id == 11){
-						epaisseurDeTrait(2);
-						couleurCourante(255,255,255);
-						afficheChaine("Oxygen tank",11,p2Coo[0]+222,p2Coo[1]-205);
-						afficheNombre( (int)(100*equipment[2].data/oxygenTankMax) ,11,p2Coo[0]+295,p2Coo[1]-205);
+						S2DE_setThickness(2);
+						S2DE_setColor(255,255,255);
+						S2DE_littleText("Oxygen tank",11,p2Coo[0]+222,p2Coo[1]-205);
+						showNumber( (int)(100*equipment[2].data/oxygenTankMax) ,11,p2Coo[0]+295,p2Coo[1]-205);
 					}
 				}
 			}
 		break;
+
 		case 3: //inventory
+
 			//planet (viewed from the player)
 			setPlColor(g.planets[planetRow]);
 			circle(800,0,400,false,true);
+
 			//inventory
-			couleurCourante(150,150,150);
-			rectangle(620,305,980,595,true);
-			couleurCourante(90,90,90);
+			S2DE_setColor(150,150,150);
+			S2DE_rectangle(620,305,980,595,true);
+			S2DE_setColor(90,90,90);
 			for(short int i=0; i < 5; i++){
 				for(short int j=0; j < 4; j++){
-					rectangle(630+i*70,315+j*70,690+i*70,375+j*70,true);
+					S2DE_rectangle(630+i*70,315+j*70,690+i*70,375+j*70,true);
 					if(focus != 1 || xSel != i || ySel != j+1) //item_selected & it is the [j+1][i]
 						ecrisImageIMG(630+i*70,315+j*70,getSprite(inventory[(int)(j+1)][i].id));
 				}
 			}
+
 			//see if mouse is on an inventory item (display its name)
 			for(short int i=0; i < 5; i++){ //see what is selected
 				for(short int j=0; j < 4; j++){
-					if(inZone(abscisseSouris(),ordonneeSouris(),
+					if(inZone(S2DE_mouseX,S2DE_mouseY,
 					   630+i*70,315+j*70,690+i*70,375+j*70)
 					   && inventory[(int)(j+1)][i].id != 0){ //<=> mouse not on void case
-						epaisseurDeTrait(2);
-						couleurCourante(255,255,255);
-						afficheChaine(objectsName[inventory[(int)(j+1)][i].id],15,650+i*70,390+j*70);
+						S2DE_setThickness(2);
+						S2DE_setColor(255,255,255);
+						S2DE_littleText(objectsName[inventory[(int)(j+1)][i].id],15,650+i*70,390+j*70);
+
 						//percentages items
 						if(inventory[(int)(j+1)][i].id == 6){
 							//pickaxe
-							afficheNombre( (int)(100*inventory[(int)(j+1)][i].data/toolsDurability) ,15,710+i*70,390+j*70);
+							showNumber( (int)(100*inventory[(int)(j+1)][i].data/toolsDurability) ,15,710+i*70,390+j*70);
 						}else if(inventory[(int)(j+1)][i].id == 11){
 							//oxygen tank
-							afficheNombre( (int)100*(inventory[(int)(j+1)][i].data/oxygenTankMax) ,15,745+i*70,390+j*70);
+							showNumber( (int)100*(inventory[(int)(j+1)][i].data/oxygenTankMax) ,15,745+i*70,390+j*70);
 						}else if(inventory[(int)(j+1)][i].id == 15){
 							//rocket
-							afficheNombre( (int)(100*inventory[(int)(j+1)][i].data/rocketFuelMax) ,15,700+i*70,390+j*70);
+							showNumber( (int)(100*inventory[(int)(j+1)][i].data/rocketFuelMax) ,15,700+i*70,390+j*70);
 						}
 						break;
 					}
 				}
 			}
+
 			//hotbar
-			couleurCourante(150,150,150);
-			rectangle(640,0,1000,80,true);
-			couleurCourante(90,90,90);
+			S2DE_setColor(150,150,150);
+			S2DE_rectangle(640,0,1000,80,true);
+			S2DE_setColor(90,90,90);
 			for(short int i=0; i < 5; i++){
-				rectangle(650+i*70,10,710+i*70,70,true);
+				S2DE_rectangle(650+i*70,10,710+i*70,70,true);
 				if(focus != 1 || xSel != i || ySel != 0) //item_selected & it is the [0][i]
 					ecrisImageIMG(650+i*70,10, getSprite(inventory[0][i].id));
 			}
-			couleurCourante(0,0,255);
-			rectangle(645+hotbarSel*70,5,715+hotbarSel*70,75,false);
+			S2DE_setColor(0,0,255);
+			S2DE_rectangle(645+hotbarSel*70,5,715+hotbarSel*70,75,false);
+
 			//see if mouse is on a hotbar item (display its name)
 			for(short int i=0; i < 5; i++){
-				if(inZone(abscisseSouris(),ordonneeSouris(),
+				if(inZone(S2DE_mouseX,S2DE_mouseY,
 				   650+i*70,10,710+i*70,70)
 				   && inventory[0][i].id != 0){ //<=> mouse not on void case
-					epaisseurDeTrait(2);
-					couleurCourante(255,255,255);
-					afficheChaine(objectsName[inventory[0][i].id],15,650+i*70,85);
+					S2DE_setThickness(2);
+					S2DE_setColor(255,255,255);
+					S2DE_littleText(objectsName[inventory[0][i].id],15,650+i*70,85);
+
 					//percentages items
 					if(inventory[0][i].id == 6){
 						//pickaxe
-						afficheNombre( (int)(100*inventory[0][i].data/toolsDurability) ,15,710+i*70,85);
+						showNumber( (int)(100*inventory[0][i].data/toolsDurability) ,15,710+i*70,85);
 					}else if(inventory[0][i].id == 11){
 						//oxygen tank
-						afficheNombre( (int)(100*inventory[0][i].data/oxygenTankMax) ,15,745+i*70,85);
+						showNumber( (int)(100*inventory[0][i].data/oxygenTankMax) ,15,745+i*70,85);
 					}else if(inventory[0][i].id == 15){
 						//rocket
-						afficheNombre( (int)(100*inventory[0][i].data/rocketFuelMax) ,15,700+i*70,85);
+						showNumber( (int)(100*inventory[0][i].data/rocketFuelMax) ,15,700+i*70,85);
 					}
 					break;
 				}
 			}
+
 			//focuses reactions
 			if(focus == 1) //item_selected
-				ecrisImageIMG(abscisseSouris()-30,ordonneeSouris()-30,getSprite(inventory[ySel][xSel].id));
+				ecrisImageIMG(S2DE_mouseX-30,S2DE_mouseY-30,getSprite(inventory[ySel][xSel].id));
 			else if(focus == 2){ //message_delete
-				couleurCourante(150,150,150);
-				rectangle(600,350,1000,550,true);
-				couleurCourante(0,0,0);
-				rectangle(600,350,1000,550,false);
-				couleurCourante(90,90,90); //yes & cancel buttons
-				rectangle(680,370,780,430,true);
-				rectangle(820,370,920,430,true);
-				couleurCourante(255,255,255);
-				epaisseurDeTrait(3);
-				afficheChaine("Delete item ?",30,700,480);
-				afficheChaine("Yes    Cancel",25,700,380);
+				S2DE_setColor(150,150,150);
+				S2DE_rectangle(600,350,1000,550,true);
+				S2DE_setColor(0,0,0);
+				S2DE_rectangle(600,350,1000,550,false);
+				S2DE_setColor(90,90,90); //yes & cancel buttons
+				S2DE_rectangle(680,370,780,430,true);
+				S2DE_rectangle(820,370,920,430,true);
+				S2DE_setColor(255,255,255);
+				S2DE_setThickness(3);
+				S2DE_littleText("Delete item ?",30,700,480);
+				S2DE_littleText("Yes    Cancel",25,700,380);
 			}
 		break;
+
 		case 4: //space
+
 			//sun
-			couleurCourante(255,255,0);
+			S2DE_setColor(255,255,0);
 			circle(g.sun.x,g.sun.y,g.sun.r,true,true);
+
 			//stars
-			couleurCourante(255,255,0);
+			S2DE_setColor(255,255,0);
 			for(short int s=0; s < g.nbrStars; s++)
-				point(g.stars[s].x,g.stars[s].y);
+				S2DE_point(g.stars[s].x,g.stars[s].y);
+
 			//planets
 			for(short int p=0; p < g.nbrPlanets; p++){
 				setPlColor(g.planets[p]);
@@ -1242,43 +1509,47 @@ void DisplayMegaSwitch(){
 					   g.planets[p].size*6,
 				true,true);
 				if(p == planetSel){ //marking selected planet
-					couleurCourante(255,255,255);
+					S2DE_setColor(255,255,255);
 					circle(g.planets[p].x,
 						   g.planets[p].y,
 						   g.planets[p].size*6+4,
 					true,false);
 				}
 			}
+
 			//marking current planet
-			couleurCourante(255,0,255);
+			S2DE_setColor(255,0,255);
 			circle(g.planets[planetRow].x,
 				   g.planets[planetRow].y,
 				   g.planets[planetRow].size*6+4,
 			true,false);
 			if(focus == 1){ //error message
-				couleurCourante(150,150,150);
-				rectangle(600,350,1000,550,true);
-				couleurCourante(0,0,0);
-				rectangle(600,350,1000,550,false);
-				couleurCourante(90,90,90); //OK buttons
-				rectangle(740,360,880,420,true);
-				couleurCourante(255,255,255);
-				epaisseurDeTrait(3);
-				afficheChaine("Rocket or player not ok",25,640,480);
-				afficheChaine("OK",25,790,380);
+				S2DE_setColor(150,150,150);
+				S2DE_rectangle(600,350,1000,550,true);
+				S2DE_setColor(0,0,0);
+				S2DE_rectangle(600,350,1000,550,false);
+				S2DE_setColor(90,90,90); //OK buttons
+				S2DE_rectangle(740,360,880,420,true);
+				S2DE_setColor(255,255,255);
+				S2DE_setThickness(3);
+				S2DE_littleText("Rocket or player not ok",25,640,480);
+				S2DE_littleText("OK",25,790,380);
 			}
 		break;
+
 		case 5: //rocket_animation
+
 			//current planet
 			if(g.planets[planetRow].atm){
-				couleurCourante(0,80,80);
+				S2DE_setColor(0,80,80);
 				circle(800,450,plRadius+300,true,true);
-				epaisseurDeTrait(3);
-				couleurCourante(150,230,230);
+				S2DE_setThickness(3);
+				S2DE_setColor(150,230,230);
 				circle(800,450,plRadius+300,true,false);
 			}
 			setPlColor(g.planets[planetRow]);
 			circle(800,450,plRadius,true,true);
+
 			//objects
 			div = getDiv();
 			for(short int i=0; i < div; i++){
@@ -1316,17 +1587,17 @@ void DisplayMegaSwitch(){
 						angle2 = angle + M_2PI/div;
 						cosA  = cos(angle1); sinA  = sin(angle1);
 						cosA2 = cos(angle2); sinA2 = sin(angle2);
-						couleurCourante(80,80,80);
-						epaisseurDeTrait(5);
+						S2DE_setColor(80,80,80);
+						S2DE_setThickness(5);
 						if(i == div-1)
-							ligne(
+							S2DE_line(
 								oCoo[i][0]-30*sinA,
 								oCoo[i][1]-30*cosA,
 								oCoo[0][0]-30*sinA2,
 								oCoo[0][1]-30*cosA2
 							);
 						else
-							ligne(
+							S2DE_line(
 								oCoo[i][0]-30*sinA,
 								oCoo[i][1]-30*cosA,
 								oCoo[(int)(i+1)][0]-30*sinA2,
@@ -1346,10 +1617,10 @@ void DisplayMegaSwitch(){
 								angle,
 							true);
 							if(g.planets[planetRow].objects[i].data == 1+oxygenTankMax){ //if oxygenTank charged
-								couleurCourante(0,255,0); //draw a green point at the top right corner
+								S2DE_setColor(0,255,0); //draw a green point at the top right corner
 								cosA = cos(angle);
 								sinA = sin(angle);
-								point(
+								S2DE_point(
 									oCoo[i][0]+15*cosA-15*sinA,
 									oCoo[i][1]+15*sinA+15*cosA
 								);
@@ -1358,6 +1629,7 @@ void DisplayMegaSwitch(){
 					}
 				}
 			}
+
 			//player
 			if(focus == 0){ //player moving
 				if(pRunning == 1)
@@ -1374,124 +1646,138 @@ void DisplayMegaSwitch(){
 					true);
 			}
 		break;
+
 		case 6: //furniture
+
 			//planet (viewed from the player)
 			setPlColor(g.planets[planetRow]);
 			circle(800,0,400,false,true);
+
 			//stock[stockSel]
-			couleurCourante(150,150,150);
-			rectangle(620,305,980,595,true);
-			couleurCourante(90,90,90);
+			S2DE_setColor(150,150,150);
+			S2DE_rectangle(620,305,980,595,true);
+			S2DE_setColor(90,90,90);
 			if(fromInv){
 				for(short int i=0; i < 5; i++){
 					for(short int j=0; j < 4; j++){
-						rectangle(630+i*70,315+j*70,690+i*70,375+j*70,true);
+						S2DE_rectangle(630+i*70,315+j*70,690+i*70,375+j*70,true);
 						ecrisImageIMG(630+i*70,315+j*70,getSprite(stock[stockSel][j][i].id));
 					}
 				}
 			}else{
 				for(short int i=0; i < 5; i++){
 					for(short int j=0; j < 4; j++){
-						rectangle(630+i*70,315+j*70,690+i*70,375+j*70,true);
+						S2DE_rectangle(630+i*70,315+j*70,690+i*70,375+j*70,true);
 						if(focus != 1 || xSel != i || ySel != j) //item_selected & it is the [j][i]
 							ecrisImageIMG(630+i*70,315+j*70,getSprite(stock[stockSel][j][i].id));
 					}
 				}
 			}
+
 			//see if mouse is on a stock[stockSel] item (display its name)
 			for(short int i=0; i < 5; i++){ //see what is selected
 				for(short int j=0; j < 4; j++){
-					if(inZone(abscisseSouris(),ordonneeSouris(),
+					if(inZone(S2DE_mouseX,S2DE_mouseY,
 					   630+i*70,315+j*70,690+i*70,375+j*70)
 					   && stock[stockSel][j][i].id != 0){ //<=> mouse not on void case
-						epaisseurDeTrait(2);
-						couleurCourante(255,255,255);
-						afficheChaine(objectsName[stock[stockSel][j][i].id],15,650+i*70,390+j*70);
+						S2DE_setThickness(2);
+						S2DE_setColor(255,255,255);
+						S2DE_littleText(objectsName[stock[stockSel][j][i].id],15,650+i*70,390+j*70);
+
 						//percentages items
 						if(stock[stockSel][j][i].id == 6){
 							//pickaxe
-							afficheNombre( (int)(100*stock[stockSel][j][i].data/toolsDurability) ,15,710+i*70,390+j*70);
+							showNumber( (int)(100*stock[stockSel][j][i].data/toolsDurability) ,15,710+i*70,390+j*70);
 						}else if(stock[stockSel][j][i].id == 11){
 							//oxygen tank
-							afficheNombre( (int)100*(stock[stockSel][j][i].data/oxygenTankMax) ,15,745+i*70,390+j*70);
+							showNumber( (int)100*(stock[stockSel][j][i].data/oxygenTankMax) ,15,745+i*70,390+j*70);
 						}else if(stock[stockSel][j][i].id == 15){
 							//rocket
-							afficheNombre( (int)(100*stock[stockSel][j][i].data/rocketFuelMax) ,15,700+i*70,390+j*70);
+							showNumber( (int)(100*stock[stockSel][j][i].data/rocketFuelMax) ,15,700+i*70,390+j*70);
 						}
 						break;
 					}
 				}
 			}
+
 			//hotbar
-			couleurCourante(150,150,150);
-			rectangle(640,0,1000,80,true);
-			couleurCourante(90,90,90);
+			S2DE_setColor(150,150,150);
+			S2DE_rectangle(640,0,1000,80,true);
+			S2DE_setColor(90,90,90);
 			if(fromInv){
 				for(short int i=0; i < 5; i++){
-					rectangle(650+i*70,10,710+i*70,70,true);
+					S2DE_rectangle(650+i*70,10,710+i*70,70,true);
 					if(focus != 1 || xSel != i) //item_selected & it is the [0][i]
 						ecrisImageIMG(650+i*70,10, getSprite(inventory[0][i].id));
 				}
 			}else{
 				for(short int i=0; i < 5; i++){
-					rectangle(650+i*70,10,710+i*70,70,true);
+					S2DE_rectangle(650+i*70,10,710+i*70,70,true);
 					ecrisImageIMG(650+i*70,10, getSprite(inventory[0][i].id));
 				}
 			}
-			couleurCourante(0,0,255);
-			rectangle(645+hotbarSel*70,5,715+hotbarSel*70,75,false);
+			S2DE_setColor(0,0,255);
+			S2DE_rectangle(645+hotbarSel*70,5,715+hotbarSel*70,75,false);
+
 			//see if mouse is on a hotbar item (display its name)
 			for(short int i=0; i < 5; i++){
-				if(inZone(abscisseSouris(),ordonneeSouris(),
+				if(inZone(S2DE_mouseX,S2DE_mouseY,
 				   650+i*70,10,710+i*70,70)
 				   && inventory[0][i].id != 0){ //<=> mouse not on void case
-					epaisseurDeTrait(2);
-					couleurCourante(255,255,255);
-					afficheChaine(objectsName[inventory[0][i].id],15,650+i*70,85);
+					S2DE_setThickness(2);
+					S2DE_setColor(255,255,255);
+					S2DE_littleText(objectsName[inventory[0][i].id],15,650+i*70,85);
+
 					//percentages items
 					if(inventory[0][i].id == 6){
 						//pickaxe
-						afficheNombre( (int)(100*inventory[0][i].data/toolsDurability) ,15,710+i*70,85);
+						showNumber( (int)(100*inventory[0][i].data/toolsDurability) ,15,710+i*70,85);
 					}else if(inventory[0][i].id == 11){
 						//oxygen tank
-						afficheNombre( (int)(100*inventory[0][i].data/oxygenTankMax) ,15,745+i*70,85);
+						showNumber( (int)(100*inventory[0][i].data/oxygenTankMax) ,15,745+i*70,85);
 					}else if(inventory[0][i].id == 15){
 						//rocket
-						afficheNombre( (int)(100*inventory[0][i].data/rocketFuelMax) ,15,700+i*70,85);
+						showNumber( (int)(100*inventory[0][i].data/rocketFuelMax) ,15,700+i*70,85);
 					}
 					break;
 				}
 			}
+
 			//focuses reactions
 			if(focus == 1){ //item_selected
 				if(fromInv)
-					ecrisImageIMG(abscisseSouris()-30,ordonneeSouris()-30,getSprite(inventory[0][xSel].id));
+					ecrisImageIMG(S2DE_mouseX-30,S2DE_mouseY-30,getSprite(inventory[0][xSel].id));
 				else
-					ecrisImageIMG(abscisseSouris()-30,ordonneeSouris()-30,getSprite(stock[stockSel][ySel][xSel].id));
+					ecrisImageIMG(S2DE_mouseX-30,S2DE_mouseY-30,getSprite(stock[stockSel][ySel][xSel].id));
 			}
 			else if(focus == 2){ //message_delete
-				couleurCourante(150,150,150);
-				rectangle(600,350,1000,550,true);
-				couleurCourante(0,0,0);
-				rectangle(600,350,1000,550,false);
-				couleurCourante(90,90,90); //yes & cancel buttons
-				rectangle(680,370,780,430,true);
-				rectangle(820,370,920,430,true);
-				couleurCourante(255,255,255);
-				epaisseurDeTrait(3);
-				afficheChaine("Delete item ?",30,700,480);
-				afficheChaine("Yes    Cancel",25,700,380);
+				S2DE_setColor(150,150,150);
+				S2DE_rectangle(600,350,1000,550,true);
+				S2DE_setColor(0,0,0);
+				S2DE_rectangle(600,350,1000,550,false);
+				S2DE_setColor(90,90,90); //yes & cancel buttons
+				S2DE_rectangle(680,370,780,430,true);
+				S2DE_rectangle(820,370,920,430,true);
+				S2DE_setColor(255,255,255);
+				S2DE_setThickness(3);
+				S2DE_littleText("Delete item ?",30,700,480);
+				S2DE_littleText("Yes    Cancel",25,700,380);
 			}
 		break;
 	}
 }
 
+
+
+//timed updates
 void TimedUpdateMegaSwitch(){
 	float temp;
 	short int div, place;
 	int tempData;
 	switch(menu){
+
 		case 2: //planet
+
 			//player animation
 			if(pRunningCnt > 0){
 				pRunningCnt--;
@@ -1505,18 +1791,22 @@ void TimedUpdateMegaSwitch(){
 						pRunning = 1;
 				}
 			}
+
 			//ground hitting
 			if(hitCnt > 0)
 				hitCnt--;
 		break;
+
 		case 4: //space
 			if(gAngleCnt == 0)
 				setGCoo();
 		break;
+
 		case 5: //rocket_animation
 			if(focus != 0)
 				rocketAnimCnt++;
 			else{
+
 				//player animation
 				if(pRunningCnt > 0){
 					pRunningCnt--;
@@ -1561,8 +1851,11 @@ void TimedUpdateMegaSwitch(){
 			}
 		break;
 	}
-	if(gAngleCnt == 0 && rocketAnimCnt == 0){ //executed every 2 seconds when not taking off from the planet
+
+	//executed every 2 seconds when not taking off from the planet
+	if(gAngleCnt == 0 && rocketAnimCnt == 0){
 		if(g.planets[planetRow].atm){
+
 			//oxygen regeneration
 			temp = 0; //here used like a bool to know if oxygen was previously regenerated
 			if(ownOxygen < ownOxygenMax){ //firstly, charge ownOxygen
@@ -1587,6 +1880,7 @@ void TimedUpdateMegaSwitch(){
 				}
 			}
 		}else{
+
 			//oxygen consumption
 			temp = 0; //here used like a bool to know if oxygen was previously consummed
 			if(equipment[2].id == 11){ //if oxygen tank2 equiped
@@ -1603,17 +1897,21 @@ void TimedUpdateMegaSwitch(){
 			}
 			if(ownOxygen > 0 && temp == 0) //finally, use ownOxygen (if no oxygen already consummed)
 				ownOxygen--;
+
 			//without suit sufferring
 			if(equipment[0].id != 4)
 				life--;
 		}
+
 		//suffocation
 		if(ownOxygen == 0 || (equipment[0].id != 4 && !g.planets[planetRow].atm)) //if no oxygen or (dont equip a space suit in a without atm planet)
 			life--;
+
 		//for each object
 		div = getDiv();
 		for(short int i=0; i < div; i++){
 			if(g.planets[planetRow].objects[i].id == 13){ //fuel maker
+
 				//for each fuel maker
 				if(g.planets[planetRow].objects[i].data > 0){ //if producing
 					g.planets[planetRow].objects[i].data--;
@@ -1628,6 +1926,7 @@ void TimedUpdateMegaSwitch(){
 					}
 				}
 			}else if(g.planets[planetRow].objects[i].id == 17){ //oxygen generator
+
 				//for each oxygen generator
 				if(g.planets[planetRow].objects[i].data != 0 && g.planets[planetRow].objects[i].data < oxygenTankMax+1){
 					g.planets[planetRow].objects[i].data += 5;
@@ -1636,6 +1935,7 @@ void TimedUpdateMegaSwitch(){
 				}
 			}
 		}
+
 		//trees spawning (even if player is viewing galaxy or inventory)
 		if(g.planets[planetRow].type == 0){ //if planet type is grass
 			if(rnd(3) == 0){ //if a little bit of chance
@@ -1663,6 +1963,7 @@ void TimedUpdateMegaSwitch(){
 				}
 			}
 		}
+
 		//galaxy moving
 		gAngle += gAngleStep;
 		if(gAngle >= M_2PI)
@@ -1672,30 +1973,40 @@ void TimedUpdateMegaSwitch(){
 		gAngleCnt--;
 }
 
-void KeypadMegaSwitch(){
+
+
+//keyboard
+void KeyboardMegaSwitch(){
 	switch(menu){
+
 		case 0: //start_menu
-			switch(caractereClavier()){
-				case 'P': //play
-				case 'p':
+			switch(S2DE_key){
+
+				case S2DE_KEY_P: //play
+				case S2DE_KEY_p:
 					menu = 2; //planet
 				break;
-				case 'O': //go to start_settings
-				case 'o':
+
+				case S2DE_KEY_O: //go to start_settings
+				case S2DE_KEY_o:
 					//menu = 1;
 				break;
-				case 'Q': //quit game
-				case 'q':
-					termineBoucleEvenements();
+
+				case S2DE_KEY_Q: //quit game
+				case S2DE_KEY_q:
+					S2DE_stop();
 				break;
 			}
 		break;
+
 		case 1: //start_settings
 		break;
+
 		case 2: //planet
-			switch(caractereClavier()){
-				case 'D':
-				case 'd':
+			switch(S2DE_key){
+
+				case S2DE_KEY_D:
+				case S2DE_KEY_d:
 					if(focus == 0){ //player_move
 						if(pRunningCnt < 3){ //right move (from the top of the planet)
 							pAngle += pAngleStep;
@@ -1709,14 +2020,15 @@ void KeypadMegaSwitch(){
 						}
 					}
 				break;
-				case 'Q':
-				case 'q':
+
+				case S2DE_KEY_Q:
+				case S2DE_KEY_q:
 					if(focus == 0){ //player_move
 						if(pRunningCnt < 3){ //left move (from the top of the planet)
 							pAngle -= pAngleStep;
 							if(pAngle < 0)
 								pAngle += M_2PI;
-								pRight = false;
+							pRight = false;
 							pRunningCnt = pRunningCntMax;
 							if(pRunning == 0)
 								pRunning = 1;
@@ -1727,7 +2039,8 @@ void KeypadMegaSwitch(){
 					else if(focus == 3 || focus == 4) //options_panel2[crafts or equip]
 						focus = 2; //options_panel1
 				break;
-				case ' ': //eat key
+
+				case S2DE_KEY_SPACE: //eat key
 					if(inventory[0][hotbarSel].id == 16){ //if fruit in hand
 						inventory[0][hotbarSel].id = 0;
 						inventory[0][hotbarSel].data = 0;
@@ -1736,35 +2049,45 @@ void KeypadMegaSwitch(){
 							life = lifeMax;
 					}
 				break;
-				case '1':
+
+				case S2DE_KEY_1:
 					hotbarSel = 0;
 				break;
-				case '2':
+
+				case S2DE_KEY_2:
 					hotbarSel = 1;
 				break;
-				case '3':
+
+				case S2DE_KEY_3:
 					hotbarSel = 2;
 				break;
-				case '4':
+
+				case S2DE_KEY_4:
 					hotbarSel = 3;
 				break;
-				case '5':
+
+				case S2DE_KEY_5:
 					hotbarSel = 4;
 				break;
 			}
 		break;
+
 		case 3: //inventory
-			switch(caractereClavier()){
-				case 'Q': //return to planet menu
-				case 'q':
+			switch(S2DE_key){
+
+				case S2DE_KEY_Q: //return to planet menu
+				case S2DE_KEY_q:
 					switch(focus){
+
 						case 0: //no_selection
 							menu = 2; //planet
 							focus = 0; //player_move
 						break;
+
 						case 1: //item_selected
 							focus = 0; //no_selection
 						break;
+
 						case 2: //message_delete
 							focus = 0; //no_selection
 						break;
@@ -1772,16 +2095,19 @@ void KeypadMegaSwitch(){
 				break;
 			}
 		break;
+
 		case 4: //space
-			switch(caractereClavier()){
+			switch(S2DE_key){
+
 				/* -------- Debug --------
-				case 'A': //increase rotation speed
-				case 'a':
+				case S2DE_KEY_A: //increase rotation speed
+				case S2DE_KEY_a:
 					gAngle += gAngleStep;
 				break;
 				*/
-				case 'Q': //go back to actual planet
-				case 'q':
+
+				case S2DE_KEY_Q: //go back to actual planet
+				case S2DE_KEY_q:
 					if(focus == 1) //error_message
 						focus = 0; //galaxy_view
 					else{ //galaxy_view
@@ -1791,18 +2117,23 @@ void KeypadMegaSwitch(){
 				break;
 			}
 		break;
+
 		case 6: //furniture
-			switch(caractereClavier()){
-				case 'Q': //return to planet menu
-				case 'q':
+			switch(S2DE_key){
+
+				case S2DE_KEY_Q: //return to planet menu
+				case S2DE_KEY_q:
 					switch(focus){
+
 						case 0: //no_selection
 							menu = 2; //planet
 							focus = 0; //player_move
 						break;
+
 						case 1: //item_selected
 							focus = 0; //no_selection
 						break;
+
 						case 2: //message_delete
 							focus = 0; //no_selection
 						break;
@@ -1813,26 +2144,33 @@ void KeypadMegaSwitch(){
 	}
 }
 
+
+
+//mouse click
 void MouseClickMegaSwitch(){
-	int x = abscisseSouris();
-	int y = ordonneeSouris();
-	bool state;
+	int x = S2DE_mouseX;
+	int y = S2DE_mouseY;
 	short int div;
-	int temp1,temp2;
+	bool state;
+	int temp1;
 	switch(menu){
+
 		case 0: //start_menu
-			if(etatBoutonSouris() == GaucheAppuye){
+			if(S2DE_mouseButton == S2DE_LEFT_BUTTON){
 				if(inZone(x,y,580,300,1020,380)) //play button
 					menu = 2; //planet
 				//else if(inZone(x,y,620,150,980,200)) //settings button
 				//	menu = 1; //start_settings
 			}
 		break;
+
 		case 1: //start_settings
 		break;
+
 		case 2: //planet
-			if(etatBoutonSouris() == DroiteAppuye){
+			if(S2DE_mouseButton == S2DE_RIGHT_BUTTON){
 				switch(focus){
+
 					case 0: //player_move
 						state = false;
 						for(short int i=0; i < 5; i++){
@@ -1840,6 +2178,7 @@ void MouseClickMegaSwitch(){
 								hotbarSel = i;
 								state = true;
 								focus = 1; //put_down_item
+
 								//just in case
 								for(short int a=0; a < 16; a++)
 									tStates[a] = false;
@@ -1851,20 +2190,24 @@ void MouseClickMegaSwitch(){
 							focus = 2; //options_panel1
 						}
 					break;
+
 					case 1: //put_down_object
 						focus = 0; //player_move
 					break;
+
 					case 2: //options_panel1
 						focus = 0; //player_move
 					break;
+
 					case 3: //options_panel2[crafts]
 						focus = 2; //options_panel1
 					break;
+
 					case 4: //options_panel2[equip]
 						focus = 2; //options_panel1
 					break;
 				}
-			}else if(etatBoutonSouris() == GaucheAppuye){
+			}else if(S2DE_mouseButton == S2DE_LEFT_BUTTON){
 				for(short int i=0; i < 5; i++){
 					if(inZone(x,y, 650+i*70,10,710+i*70,70)){
 						hotbarSel = i;
@@ -1872,6 +2215,7 @@ void MouseClickMegaSwitch(){
 					}
 				}
 				switch(focus){
+
 					case 0: //player_moving
 						//hit the ground analysis
 						if(hitCnt == 0){
@@ -1927,10 +2271,12 @@ void MouseClickMegaSwitch(){
 							}
 						}
 					break;
+
 					case 1: //put_down_item
 						div = getDiv();
 						for(short int i=0; i < div; i++){
 							if(tStates[i]){
+
 								//put an object down
 								if(g.planets[planetRow].objects[i].id == 13 //if object is fuel maker && we have fiber in hand && we are not already producing fuel
 								&& inventory[0][hotbarSel].id == 3 && g.planets[planetRow].objects[i].data == 0){
@@ -1959,10 +2305,12 @@ void MouseClickMegaSwitch(){
 												tryToPutDown(i,div);
 										}
 									}
+
 								//get an object from the ground
 								}else if(inventory[0][hotbarSel].id == 0 && g.planets[planetRow].objects[i].id != 1){ //the planet object gotten cannot be a tree
 									if(g.planets[planetRow].objects[i].id == 13){ //if object is a fuel maker
 										if(g.planets[planetRow].objects[i].data == 0){ //if not producing
+
 											//get the object in the hotbar
 											inventory[0][hotbarSel].id = g.planets[planetRow].objects[i].id; //passing item from planet to hotbar
 											inventory[0][hotbarSel].data = g.planets[planetRow].objects[i].data;
@@ -1971,6 +2319,7 @@ void MouseClickMegaSwitch(){
 										}
 									}else if(g.planets[planetRow].objects[i].id == 17){ //if object is an oxygen generator
 										if(g.planets[planetRow].objects[i].data == 0){ //if not active
+
 											//get the object in the hotbar
 											inventory[0][hotbarSel].id = g.planets[planetRow].objects[i].id; //passing item from planet to hotbar
 											inventory[0][hotbarSel].data = g.planets[planetRow].objects[i].data;
@@ -1992,6 +2341,7 @@ void MouseClickMegaSwitch(){
 							}
 						}
 					break;
+
 					case 2: //options_panel1
 						if(inZone(x,y,p1Coo[0]+10, p1Coo[1]+90,
 									  p1Coo[0]+80, p1Coo[1]+160)){ //go to inventory
@@ -2012,10 +2362,12 @@ void MouseClickMegaSwitch(){
 							planetSel = -1;
 						}
 					break;
+
 					case 3: //options_panel2[crafts]
 						if(inZone(x,y,p2Coo[0]+250,p2Coo[1]-65,
 									  p2Coo[0]+330,p2Coo[1]-35)){ //first craft
 							switch(craftPage){
+
 								case 0:
 									if(invCountItem(3) >= 3){ //at least 3 fiber
 										delInInv(3); //fiber
@@ -2024,6 +2376,7 @@ void MouseClickMegaSwitch(){
 										addInInv(4,0); //space suit
 									}
 								break;
+
 								case 1:
 									if(invCountItem(5) >= 1 && invCountItem(8) >= 1){ //at least 1 multi tool, 1 iron
 										delInInv(5); //multi tool
@@ -2031,6 +2384,7 @@ void MouseClickMegaSwitch(){
 										addInInv(9,0); //screwdriver
 									}
 								break;
+
 								case 2:
 									if(invCountItem(12) >= 1 && invCountItem(10) >= 1){ //at least 1 machine base, 1 hammer
 										delInInv(12); //machine base
@@ -2038,6 +2392,7 @@ void MouseClickMegaSwitch(){
 										addInInv(13,0); //fuel maker
 									}
 								break;
+
 								case 3:
 									if(invCountItem(12) >= 1 && invCountItem(10) >= 2
 									&& invCountItem(16) >= 1 && invCountItem(3) >= 3){ //at least 1 machine base, 2 hammer, 1 fruit, 3 fiber
@@ -2053,6 +2408,7 @@ void MouseClickMegaSwitch(){
 						}else if(inZone(x,y,p2Coo[0]+250,p2Coo[1]-160,
 											p2Coo[0]+330,p2Coo[1]-130)){ //second craft
 							switch(craftPage){
+
 								case 0:
 									if(invCountItem(2) >= 1 && invCountItem(3) >= 1){ //at least 1 wood, 1 fiber
 										delInInv(2); //wood
@@ -2060,6 +2416,7 @@ void MouseClickMegaSwitch(){
 										addInInv(5,0); //multi tool
 									}
 								break;
+
 								case 1:
 									if(invCountItem(5) >= 1 && invCountItem(8) >= 2){ //at least 1 multi tool, 2 iron
 										delInInv(5); //multi tool
@@ -2068,6 +2425,7 @@ void MouseClickMegaSwitch(){
 										addInInv(10,0); //hammer
 									}
 								break;
+
 								case 2:
 									if(invCountItem(12) >= 2 && invCountItem(2) >= 2
 									&& invCountItem(9) >= 2 && invCountItem(8) >= 2){ //at least 2 machine base, 2 wood, 2 screwdriver, 2 iron
@@ -2078,6 +2436,7 @@ void MouseClickMegaSwitch(){
 										addInInv(15,0); //rocket
 									}
 								break;
+
 								case 3:
 									if(craftedStocks < stockMax && invCountItem(12) >= 1 && invCountItem(9) >= 1){ //at least 4 iron, 1 screwdriver
 										delInInv(8);	delInInv(8); //iron
@@ -2097,6 +2456,7 @@ void MouseClickMegaSwitch(){
 						}else if(inZone(x,y,p2Coo[0]+250,p2Coo[1]-255,
 											p2Coo[0]+330,p2Coo[1]-225)){ //third craft
 							switch(craftPage){
+
 								case 0:
 									if(invCountItem(5) >= 1 && invCountItem(7) >= 2){ //at least 1 multi tool, 2 rock
 										delInInv(5); //multi tool
@@ -2105,6 +2465,7 @@ void MouseClickMegaSwitch(){
 										addInInv(6,toolsDurability); //pickaxe
 									}
 								break;
+
 								case 1:
 									if(invCountItem(7) >= 2 && invCountItem(8) >= 2
 									&& invCountItem(5) >=  1){ //at least 2 rock, 2 iron, 1 multi tool
@@ -2116,6 +2477,7 @@ void MouseClickMegaSwitch(){
 										addInInv(12,0); //machine base
 									}
 								break;
+
 								case 2:
 									if(invCountItem(8) >= 3){ //at least 3 iron
 										delInInv(8); //iron
@@ -2132,6 +2494,7 @@ void MouseClickMegaSwitch(){
 								craftPage = 0;
 						}
 					break;
+
 					case 4: //options_panel2[equip]
 						if(inZone(x,y,p2Coo[0]+30,p2Coo[1]-140,p2Coo[0]+90,p2Coo[1]-80)){
 							if(inventory[0][hotbarSel].id == 4 && equipment[0].id == 0){ //space suit
@@ -2170,27 +2533,30 @@ void MouseClickMegaSwitch(){
 				}
 			}
 		break;
+
 		case 3: //inventory
 			switch(focus){
+
 				case 0: //no_selection
-					if(etatBoutonSouris() == GaucheAppuye || etatBoutonSouris() == DroiteAppuye){
+					if(S2DE_mouseButton == S2DE_LEFT_BUTTON || S2DE_mouseButton == S2DE_RIGHT_BUTTON){
 						for(short int i=0; i < 5; i++){ //see what is selected
 							for(short int j=0; j < 4; j++){
 								if(inZone(x,y,630+i*70,315+j*70,
 											  690+i*70,375+j*70)){
 									xSel = i;
 									ySel = j+1;
-									focus = 1 + (int)(etatBoutonSouris() == DroiteAppuye); //item_selected if GaucheAppuye or message_delete if DroiteAppuye
+									focus = 1 + (int)(S2DE_mouseButton == S2DE_RIGHT_BUTTON); //item_selected if S2DE_LEFT_BUTTON or message_delete if S2DE_RIGHT_BUTTON
 									break;
 								}
 							}
 						}
+
 						//don't forget the hotbar
 						for(short int i=0; i < 5; i++){
 							if(inZone(x,y,650+i*70,10,710+i*70,70)){
 								xSel = i;
 								ySel = 0;
-								focus = 1 + (int)(etatBoutonSouris() == DroiteAppuye); //item_selected if GaucheAppuye or message_delete if DroiteAppuye
+								focus = 1 + (int)(S2DE_mouseButton == S2DE_RIGHT_BUTTON); //item_selected if S2DE_LEFT_BUTTON or message_delete if S2DE_RIGHT_BUTTON
 								break;
 							}
 						}
@@ -2198,61 +2564,30 @@ void MouseClickMegaSwitch(){
 							focus = 0; //no_selection
 					}
 				break;
-				case 1: //item_selected
-					if(etatBoutonSouris() == GaucheRelache){
-						for(short int i=0; i < 5; i++){ //see what is selected
-							for(short int j=0; j < 4; j++){
-								if(inZone(x,y,630+i*70,315+j*70, //if mouse on a case
-											  690+i*70,375+j*70)){
-									temp1 = inventory[(int)(j+1)][i].id; //switching items
-									temp2 = inventory[(int)(j+1)][i].data;
-									inventory[(int)(j+1)][i].id = inventory[ySel][xSel].id;
-									inventory[(int)(j+1)][i].data = inventory[ySel][xSel].data;
-									inventory[ySel][xSel].id = temp1;
-									inventory[ySel][xSel].data = temp2;
-									focus = 0; //no_selection
-									break;
-								}
-							}
-						}
-						//don't forget the hotbar
-						for(short int i=0; i < 5; i++){
-							if(inZone(x,y,650+i*70,10,710+i*70,70)){ //if mouse on a case
-								temp1 = inventory[0][i].id;
-								temp2 = inventory[0][i].data;
-								inventory[0][i].id = inventory[ySel][xSel].id;
-								inventory[0][i].data = inventory[ySel][xSel].data;
-								inventory[ySel][xSel].id = temp1;
-								inventory[ySel][xSel].data = temp2;
-								focus = 0; //no_selection
-								break;
-							}
-						}
-						if(focus != 0) //<=> release click out of all void cases
-							focus = 0;
-					}
-				break;
+
 				case 2: //message_delete
 					if(inventory[ySel][xSel].id != 18){ //furniture (can't be deleted)
-						if(etatBoutonSouris() == GaucheAppuye){
+						if(S2DE_mouseButton == S2DE_LEFT_BUTTON){
 							if(inZone(x,y,680,370,780,430)){
 								inventory[ySel][xSel].id = 0; //nothing
 								inventory[ySel][xSel].data = 0;
 								focus = 0; //no_selection
 							}else if(inZone(x,y,820,370,920,430))
 								focus = 0; //no_selection
-						}else if(etatBoutonSouris() == DroiteAppuye)
+						}else if(S2DE_mouseButton == S2DE_RIGHT_BUTTON)
 							focus = 0; //no_selection
 					}else
 						focus = 0; //no_selection
 				break;
 			}
 		break;
+
 		case 4: //space
-			if(focus == 0 && etatBoutonSouris() == GaucheAppuye){ //galaxy_view
+			if(focus == 0 && S2DE_mouseButton == S2DE_LEFT_BUTTON){ //galaxy_view
 				if(planetSel != -1){
 					temp1 = checkForRocket();
 					if(temp1 != -1 && equipment[0].id == 4){ //<=> if a rocket with fuel exists on the planet && player equip a space suit
+
 						//taking off from the actual planet
 						rocketDistance = 0;
 						rocketAnimCnt = 0;
@@ -2267,13 +2602,15 @@ void MouseClickMegaSwitch(){
 						focus = 1; //error_message
 				}
 			}else if(focus == 1 //error_message
-			&& ( (etatBoutonSouris() == GaucheAppuye && inZone(x,y,740,360,880,420)) || etatBoutonSouris() == DroiteAppuye ) )
+			&& ( (S2DE_mouseButton == S2DE_LEFT_BUTTON && inZone(x,y,740,360,880,420)) || S2DE_mouseButton == S2DE_RIGHT_BUTTON ) )
 					focus = 0; //galaxy_view
 		break;
+
 		case 6: //furniture
 			switch(focus){
+
 				case 0: //no_selection
-					if(etatBoutonSouris() == GaucheAppuye || etatBoutonSouris() == DroiteAppuye){
+					if(S2DE_mouseButton == S2DE_LEFT_BUTTON || S2DE_mouseButton == S2DE_RIGHT_BUTTON){
 						for(short int i=0; i < 5; i++){ //see what is selected
 							for(short int j=0; j < 4; j++){
 								if(inZone(x,y,630+i*70,315+j*70,
@@ -2281,17 +2618,18 @@ void MouseClickMegaSwitch(){
 									xSel = i;
 									ySel = j;
 									fromInv = false;
-									focus = 1 + (int)(etatBoutonSouris() == DroiteAppuye); //item_selected if GaucheAppuye or message_delete if DroiteAppuye
+									focus = 1 + (int)(S2DE_mouseButton == S2DE_RIGHT_BUTTON); //item_selected if S2DE_LEFT_BUTTON or message_delete if S2DE_RIGHT_BUTTON
 									break;
 								}
 							}
 						}
+
 						//don't forget the hotbar
 						for(short int i=0; i < 5; i++){
 							if(inZone(x,y,650+i*70,10,710+i*70,70)){
 								xSel = i;
 								fromInv = true;
-								focus = 1 + (int)(etatBoutonSouris() == DroiteAppuye); //item_selected if GaucheAppuye or message_delete if DroiteAppuye
+								focus = 1 + (int)(S2DE_mouseButton == S2DE_RIGHT_BUTTON); //item_selected if S2DE_LEFT_BUTTON or message_delete if S2DE_RIGHT_BUTTON
 								break;
 							}
 						}
@@ -2299,78 +2637,31 @@ void MouseClickMegaSwitch(){
 							focus = 0; //no_selection
 					}
 				break;
-				case 1: //item_selected
-					if(etatBoutonSouris() == GaucheRelache){
-						for(short int i=0; i < 5; i++){ //see what is selected
-							for(short int j=0; j < 4; j++){
-								if(inZone(x,y,630+i*70,315+j*70, //if mouse on a case
-											  690+i*70,375+j*70)){
-									temp1 = stock[stockSel][j][i].id; //switching items
-									temp2 = stock[stockSel][j][i].data;
-									if(fromInv){
-										stock[stockSel][j][i].id = inventory[0][xSel].id;
-										stock[stockSel][j][i].data = inventory[0][xSel].data;
-										inventory[0][xSel].id = temp1;
-										inventory[0][xSel].data = temp2;
-									}else{
-										stock[stockSel][j][i].id = stock[stockSel][ySel][xSel].id;
-										stock[stockSel][j][i].data = stock[stockSel][ySel][xSel].data;
-										stock[stockSel][ySel][xSel].id = temp1;
-										stock[stockSel][ySel][xSel].data = temp2;
-									}
-									focus = 0; //no_selection
-									break;
-								}
-							}
-						}
-						//don't forget the hotbar
-						for(short int i=0; i < 5; i++){
-							if(inZone(x,y,650+i*70,10,710+i*70,70)){ //if mouse on a case
-								temp1 = inventory[0][i].id;
-								temp2 = inventory[0][i].data;
-								if(fromInv){
-									inventory[0][i].id = inventory[0][xSel].id;
-									inventory[0][i].data = inventory[0][xSel].data;
-									inventory[0][xSel].id = temp1;
-									inventory[0][xSel].data = temp2;
-								}else{
-									inventory[0][i].id = stock[stockSel][ySel][xSel].id;
-									inventory[0][i].data = stock[stockSel][ySel][xSel].data;
-									stock[stockSel][ySel][xSel].id = temp1;
-									stock[stockSel][ySel][xSel].data = temp2;
-								}
-								focus = 0; //no_selection
-								break;
-							}
-						}
-						if(focus != 0) //<=> release click out of all void cases
-							focus = 0;
-					}
-				break;
+
 				case 2: //message_delete
 					if(fromInv){
 						if(inventory[0][xSel].id != 18){ //furniture (can't be deleted)
-							if(etatBoutonSouris() == GaucheAppuye){
+							if(S2DE_mouseButton == S2DE_LEFT_BUTTON){
 								if(inZone(x,y,680,370,780,430)){
 									inventory[0][xSel].id = 0; //nothing
 									inventory[0][xSel].data = 0;
 									focus = 0; //no_selection
 								}else if(inZone(x,y,820,370,920,430))
 									focus = 0; //no_selection
-							}else if(etatBoutonSouris() == DroiteAppuye)
+							}else if(S2DE_mouseButton == S2DE_RIGHT_BUTTON)
 								focus = 0; //no_selection
 						}else
 							focus = 0; //no selection
 					}else{
 						if(stock[stockSel][ySel][xSel].id != 18){ //furniture (can't be deleted)
-							if(etatBoutonSouris() == GaucheAppuye){
+							if(S2DE_mouseButton == S2DE_LEFT_BUTTON){
 								if(inZone(x,y,680,370,780,430)){
 									stock[stockSel][ySel][xSel].id = 0; //nothing
 									stock[stockSel][ySel][xSel].data = 0;
 									focus = 0; //no_selection
 								}else if(inZone(x,y,820,370,920,430))
 									focus = 0; //no_selection
-							}else if(etatBoutonSouris() == DroiteAppuye)
+							}else if(S2DE_mouseButton == S2DE_RIGHT_BUTTON)
 								focus = 0; //no_selection
 						}else
 							focus = 0; //no_selection
@@ -2381,11 +2672,117 @@ void MouseClickMegaSwitch(){
 	}
 }
 
+
+
+//mouse release
+void MouseReleaseMegaSwitch(){
+	int x = S2DE_mouseX;
+	int y = S2DE_mouseY;
+	int temp1,temp2;
+	switch(menu){
+
+		case 3: //inventory
+
+			//item_selected
+			if(focus == 1 && S2DE_mouseButton == S2DE_LEFT_BUTTON){
+				for(short int i=0; i < 5; i++){ //see what is selected
+					for(short int j=0; j < 4; j++){
+						if(inZone(x,y,630+i*70,315+j*70, //if mouse on a case
+									  690+i*70,375+j*70)){
+							temp1 = inventory[(int)(j+1)][i].id; //switching items
+							temp2 = inventory[(int)(j+1)][i].data;
+							inventory[(int)(j+1)][i].id = inventory[ySel][xSel].id;
+							inventory[(int)(j+1)][i].data = inventory[ySel][xSel].data;
+							inventory[ySel][xSel].id = temp1;
+							inventory[ySel][xSel].data = temp2;
+							focus = 0; //no_selection
+							break;
+						}
+					}
+				}
+
+				//don't forget the hotbar
+				for(short int i=0; i < 5; i++){
+					if(inZone(x,y,650+i*70,10,710+i*70,70)){ //if mouse on a case
+						temp1 = inventory[0][i].id;
+						temp2 = inventory[0][i].data;
+						inventory[0][i].id = inventory[ySel][xSel].id;
+						inventory[0][i].data = inventory[ySel][xSel].data;
+						inventory[ySel][xSel].id = temp1;
+						inventory[ySel][xSel].data = temp2;
+						focus = 0; //no_selection
+						break;
+					}
+				}
+				if(focus != 0) //<=> release click out of all void cases
+					focus = 0;
+			}
+
+		break;
+
+		case 6: //furniture
+
+			//item selected
+			if(focus == 1 && S2DE_mouseButton == S2DE_LEFT_BUTTON){
+				for(short int i=0; i < 5; i++){ //see what is selected
+					for(short int j=0; j < 4; j++){
+						if(inZone(x,y,630+i*70,315+j*70, //if mouse on a case
+									  690+i*70,375+j*70)){
+							temp1 = stock[stockSel][j][i].id; //switching items
+							temp2 = stock[stockSel][j][i].data;
+							if(fromInv){
+								stock[stockSel][j][i].id = inventory[0][xSel].id;
+								stock[stockSel][j][i].data = inventory[0][xSel].data;
+								inventory[0][xSel].id = temp1;
+								inventory[0][xSel].data = temp2;
+							}else{
+								stock[stockSel][j][i].id = stock[stockSel][ySel][xSel].id;
+								stock[stockSel][j][i].data = stock[stockSel][ySel][xSel].data;
+								stock[stockSel][ySel][xSel].id = temp1;
+								stock[stockSel][ySel][xSel].data = temp2;
+							}
+							focus = 0; //no_selection
+							break;
+						}
+					}
+				}
+
+				//don't forget the hotbar
+				for(short int i=0; i < 5; i++){
+					if(inZone(x,y,650+i*70,10,710+i*70,70)){ //if mouse on a case
+						temp1 = inventory[0][i].id;
+						temp2 = inventory[0][i].data;
+						if(fromInv){
+							inventory[0][i].id = inventory[0][xSel].id;
+							inventory[0][i].data = inventory[0][xSel].data;
+							inventory[0][xSel].id = temp1;
+							inventory[0][xSel].data = temp2;
+						}else{
+							inventory[0][i].id = stock[stockSel][ySel][xSel].id;
+							inventory[0][i].data = stock[stockSel][ySel][xSel].data;
+							stock[stockSel][ySel][xSel].id = temp1;
+							stock[stockSel][ySel][xSel].data = temp2;
+						}
+						focus = 0; //no_selection
+						break;
+					}
+				}
+				if(focus != 0) //<=> release click out of all void cases
+					focus = 0;
+			}
+		break;
+	}
+}
+
+
+
+//mouse move
 void MouseMoveMegaSwitch(){
-	int x = abscisseSouris();
-	int y = ordonneeSouris();
+	int x = S2DE_mouseX;
+	int y = S2DE_mouseY;
 	short int r, div;
 	switch(menu){
+
 		case 2: //planet
 			if(focus == 1){ //put_down_item
 				div = getDiv();
@@ -2396,6 +2793,7 @@ void MouseMoveMegaSwitch(){
 					);
 			}
 		break;
+
 		case 4: //space
 			if(focus == 0){ //galaxy_view
 				planetSel = -1;
@@ -2414,149 +2812,186 @@ void MouseMoveMegaSwitch(){
 
 
 
-// ======================== MAIN ===========================
-int main(int argc, char **argv){
-	initialiseGfx(argc, argv);
-	prepareFenetreGraphique("Space Conquest [0.1.0]", 1600, 900);	
-	activeGestionDeplacementPassifSouris();
-	//launch exeloop
-	lanceBoucleEvenements();
-	return 0;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ======================== EXECUTION ===========================
 
 //manage all types of event
-void gestionEvenement(EvenementGfx evenement){
-	int radius;
-	float theta;
-	switch(evenement){
-		case Initialisation:
-			demandeTemporisation(25); //<=> 30fps
-			setSprites();
-			//set sun
-			g.sun.x = 800; g.sun.y = 450; g.sun.r = 30;
-			//set stars			
-			g.nbrStars = 2+rnd(14);
-			for(short int s=0; s < g.nbrStars; s++){
-				//set position thanks to radius and angle (theta)
-				radius = g.sun.r + rnd(365-g.sun.r);
-				theta = (2*s + rnd(3)/2)*M_PI/g.nbrStars;
-				g.stars[s].x = 800 + radius*cos(theta);
-				g.stars[s].y = 450 + radius*sin(theta);
-				g.stars[s].r = radius;
-			}
-			//set planets
-			g.nbrPlanets = 1+rnd(9);
-			for(short int p=0; p < g.nbrPlanets; p++){
-				radius = g.sun.r + rnd(395-g.sun.r);
-				theta = (2*p + rnd(3)/2)*M_PI/g.nbrPlanets;
-				g.planets[p].x = 800 + radius*cos(theta); //square zone to spawn
-				g.planets[p].y = 450 + radius*sin(theta);
-				g.planets[p].size = 1+rnd(3);
-				g.planets[p].atm = !(bool)rnd(20);
-				g.planets[p].type = rnd(5)+(bool)rnd(80); //diamond type is rare
-				//reset objects
-				for(short int o=0; o < 16; o++){
-					g.planets[p].objects[o].id = 0; //nothing
-					g.planets[p].objects[o].data = 0;
-				}
-				//starter planet
-				if(p == 0){
-					g.planets[0].atm = true;
-					g.planets[0].type = 0; //grass
-					g.planets[0].size = 2;
-					g.planets[0].objects[2].id = 1; //tree
-					g.planets[0].objects[3].id = 1; //tree
-					g.planets[0].objects[5].id = 1; //tree
-					g.planets[0].objects[7].id = 1; //tree
-				}
-			}
-			setPlanet(); //setPlayerCoo(), setTCoo() and setOCoo() included
-			//show galaxy in console
-			printf("%d stars generated\n",g.nbrStars);
-			for(short int s=0; s < g.nbrStars; s++)
-				printf("  - star %d : radius from sun %d, position (%d;%d)\n",s,
-					g.stars[s].r, g.stars[s].x,g.stars[s].y
-				);
-			printf("%d planets generated\n",g.nbrPlanets);
-			for(short int p=0; p < g.nbrPlanets; p++)
-				printf("  - planet %d : size %d, type %d, atm %d, position (%d;%d)\n",p,
-					g.planets[p].size, g.planets[p].type, (int)g.planets[p].atm, g.planets[p].x,g.planets[p].y
-				);
-			//set equipment
-			equipment[0].id = 0; //nothing
-			equipment[0].data = 0;
-			equipment[1].id = 0; //nothing
-			equipment[1].data = 0;
-			equipment[2].id = 0; //nothing
-			equipment[2].data = 0;
-			//set inventory
-			for(short int a=0; a < 5; a++){
-				for(short int b=0; b < 5; b++){
-					inventory[a][b].id = 0; //nothing
-					inventory[a][b].data = 0;
-				}
-			}
-			/*
-			inventory[0][0].id = 1; //tree
-			inventory[0][1].id = 2; //wood
-			inventory[0][2].id = 3; //fiber
-			inventory[0][3].id = 4; //space suit
-			inventory[0][4].id = 5; //multi tool
-			inventory[1][0].id = 6; //pickaxe
-			inventory[1][0].data = toolsDurability;
-			inventory[1][1].id = 7; //rock
-			inventory[1][2].id = 8; //iron
-			inventory[1][3].id = 9; //screwdriver
-			inventory[1][4].id = 10; //hammer
-			inventory[2][0].id = 11; //oxygen tank
-			inventory[2][0].data = oxygenTankMax;
-			inventory[2][1].id = 12; //machine base
-			inventory[2][2].id = 13; //fuel maker
-			inventory[2][3].id = 14; //fuel
-			inventory[2][4].id = 15; //rocket
-			inventory[3][0].id = 16; //fruit
-			inventory[3][1].id = 17; //oxygen generator
-			inventory[3][2].id = 18; //furniture
-			*/
-		break;
-		case Temporisation:
+void S2DE_event(int event){
+	switch(event){
+
+		case S2DE_TIMER:
 			if(starter)
 				starterCnt++;
 			else
 				TimedUpdateMegaSwitch();
-			rafraichisFenetre();
+			S2DE_refresh();
 		break;
-		case Affichage:
+
+		case S2DE_DISPLAY:
 			if(starter){ //Icons interface
-				if(starterCnt < 10)
-					effaceFenetre(0,0,0);
-				else if(starterCnt < 30)
+				if(starterCnt < 10){
+					S2DE_setColor(0,0,0);
+					S2DE_rectangle(0,0, 1600,900, 1);
+				}else if(starterCnt < 30)
 					ecrisImageIMG(686,325,yncrea);
-				else if(starterCnt < 40)
-					effaceFenetre(0,0,0);
-				else if(starterCnt < 60)
+				else if(starterCnt < 40){
+					S2DE_setColor(0,0,0);
+					S2DE_rectangle(0,0, 1600,900, 1);
+				}else if(starterCnt < 60)
 					ecrisImageIMG(438,350,ISEN);
 				else if(starterCnt > 80)
 					starter = false;
 			}else
 				DisplayMegaSwitch();
 		break;
-		case Clavier:
+
+		case S2DE_KEYBOARD:
+			if(S2DE_keyState == S2DE_KEY_RELEASED) //catch only "key presses" events
+				break;
+
 			if(!starter)
-				KeypadMegaSwitch();
+				KeyboardMegaSwitch();
 		break;
-		case ClavierSpecial:
+
+		case S2DE_MOUSECLICK:
+			if(!starter){
+				if(S2DE_mouseState == S2DE_MOUSE_PRESSED)
+					MouseClickMegaSwitch();
+				else
+					MouseReleaseMegaSwitch();
+			}
 		break;
-		case BoutonSouris:
-			if(!starter)
-				MouseClickMegaSwitch();
-		break;
-		case Souris:
+
+		case S2DE_MOUSEMOVE:
 			MouseMoveMegaSwitch();
 		break;
-		case Inactivite:
-		break;
-		case Redimensionnement:
-		break;
 	}
+}
+
+int main(int argc, char **argv){
+
+	//init graphics
+	S2DE_init(argc,argv, "Space Conquest [0.1.0]", 1600,900);
+	S2DE_setTimer(25); //<=> 30fps
+	setSprites();
+
+	//init random
+	srand(time(NULL));
+
+	//set sun
+	g.sun.x = 800; g.sun.y = 450; g.sun.r = 30;
+
+	//set stars
+	double radius, theta;
+	g.nbrStars = 2+rnd(14);
+	for(short int s=0; s < g.nbrStars; s++){
+
+		//set position thanks to radius and angle (theta)
+		radius = g.sun.r + rnd(365-g.sun.r);
+		theta = (2*s + rnd(3)/2)*M_PI/g.nbrStars;
+		g.stars[s].x = 800 + radius*cos(theta);
+		g.stars[s].y = 450 + radius*sin(theta);
+		g.stars[s].r = radius;
+	}
+
+	//set planets
+	g.nbrPlanets = 1+rnd(9);
+	for(short int p=0; p < g.nbrPlanets; p++){
+		radius = g.sun.r + rnd(395-g.sun.r);
+		theta = (2*p + rnd(3)/2)*M_PI/g.nbrPlanets;
+		g.planets[p].x = 800 + radius*cos(theta); //square zone to spawn
+		g.planets[p].y = 450 + radius*sin(theta);
+		g.planets[p].size = 1+rnd(3);
+		g.planets[p].atm = !(bool)rnd(20);
+		g.planets[p].type = rnd(5)+(bool)rnd(80); //diamond type is rare
+
+		//reset objects
+		for(short int o=0; o < 16; o++){
+			g.planets[p].objects[o].id = 0; //nothing
+			g.planets[p].objects[o].data = 0;
+		}
+
+		//starter planet
+		if(p == 0){
+			g.planets[0].atm = true;
+			g.planets[0].type = 0; //grass
+			g.planets[0].size = 2;
+			g.planets[0].objects[2].id = 1; //tree
+			g.planets[0].objects[3].id = 1; //tree
+			g.planets[0].objects[5].id = 1; //tree
+			g.planets[0].objects[7].id = 1; //tree
+		}
+	}
+	setPlanet(); //setPlayerCoo(), setTCoo() and setOCoo() included
+
+	//show galaxy in console
+	printf("%d stars generated\n",g.nbrStars);
+	for(short int s=0; s < g.nbrStars; s++)
+		printf("  - star %d : radius from sun %d, position (%d;%d)\n",s,
+			g.stars[s].r, g.stars[s].x,g.stars[s].y
+		);
+	printf("%d planets generated\n",g.nbrPlanets);
+	for(short int p=0; p < g.nbrPlanets; p++)
+		printf("  - planet %d : size %d, type %d, atm %d, position (%d;%d)\n",p,
+			g.planets[p].size, g.planets[p].type, (int)g.planets[p].atm, g.planets[p].x,g.planets[p].y
+		);
+
+	//set equipment
+	equipment[0].id = 0; //nothing
+	equipment[0].data = 0;
+	equipment[1].id = 0; //nothing
+	equipment[1].data = 0;
+	equipment[2].id = 0; //nothing
+	equipment[2].data = 0;
+
+	//set inventory
+	for(short int a=0; a < 5; a++){
+		for(short int b=0; b < 5; b++){
+			inventory[a][b].id = 0; //nothing
+			inventory[a][b].data = 0;
+		}
+	}
+	/*
+	inventory[0][0].id = 1; //tree
+	inventory[0][1].id = 2; //wood
+	inventory[0][2].id = 3; //fiber
+	inventory[0][3].id = 4; //space suit
+	inventory[0][4].id = 5; //multi tool
+	inventory[1][0].id = 6; //pickaxe
+	inventory[1][0].data = toolsDurability;
+	inventory[1][1].id = 7; //rock
+	inventory[1][2].id = 8; //iron
+	inventory[1][3].id = 9; //screwdriver
+	inventory[1][4].id = 10; //hammer
+	inventory[2][0].id = 11; //oxygen tank
+	inventory[2][0].data = oxygenTankMax;
+	inventory[2][1].id = 12; //machine base
+	inventory[2][2].id = 13; //fuel maker
+	inventory[2][3].id = 14; //fuel
+	inventory[2][4].id = 15; //rocket
+	inventory[3][0].id = 16; //fruit
+	inventory[3][1].id = 17; //oxygen generator
+	inventory[3][2].id = 18; //furniture
+	*/
+
+	//launch event loop
+	S2DE_start();
+
+	return EXIT_SUCCESS;
 }

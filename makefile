@@ -1,17 +1,16 @@
-#executables
-SpaceConquest: SpaceConquest.o libisentlib.a
-	gcc -Wall -o run SpaceConquest.o libisentlib.a -lm -lglut -lGL -lX11
-	rm -f *.o *.a
+#executable
+run: SpaceConquest.o S2DE.o
+	gcc -Wall -o run SpaceConquest.o S2DE.o -lm -lglut -lGL -lX11 -O2
+	rm -f *.o
 
 
 
-#libraries
-libisentlib.a: ESLib.o GfxLib.o
-	ar r libisentlib.a ESLib.o GfxLib.o
-	ranlib libisentlib.a
+#game
+SpaceConquest.o: SpaceConquest.c S2DE.h img.c
+	gcc -Wall -c SpaceConquest.c -O2 -I/usr/include/GL
 
-ESLib.o: ESLib.c ESLib.h ErreurLib.h
-	gcc -Wall -c ESLib.c -O2
 
-GfxLib.o: GfxLib.c GfxLib.h ESLib.h
-	gcc -Wall -c GfxLib.c -I/usr/include/GL -O2
+
+#S2DE
+S2DE.o: S2DE.c S2DE.h
+	gcc -Wall -c S2DE.c -O2 -I/usr/include/GL
