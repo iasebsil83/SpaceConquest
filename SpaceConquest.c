@@ -20,7 +20,7 @@
 
 
 //images
-#include "img.c"
+#include "src/img.c"
 
 
 
