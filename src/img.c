@@ -16,14 +16,6 @@
 
 
 
-
-
-
-
-
-
-
-
 // ---------------- DEFINITIONS ----------------
 static const double Pi2 = 2*M_PI;
 struct IMG{
@@ -31,14 +23,6 @@ struct IMG{
 	int* data;
 };
 typedef struct IMG img;
-
-
-
-
-
-
-
-
 
 
 
@@ -84,14 +68,6 @@ void showNumber(int nbr, float taille, float x, float y){
 	sprintf(c,"(%d/100)",nbr);
 	S2DE_text(c,taille/120.f,x,y);
 }
-
-
-
-
-
-
-
-
 
 
 

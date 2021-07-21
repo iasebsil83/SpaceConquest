@@ -14,21 +14,13 @@
 
 
 //graphics
-#include "src/S2DE.h"
+#include "../lib/S2DE.h"
 #define S2DE_littleText(t,s,x,y) S2DE_text(t,(s)/120.f,x,y)
 
 
 
 //images
-#include "src/img.c"
-
-
-
-
-
-
-
-
+#include "img.c"
 
 
 
@@ -95,14 +87,6 @@
 
 
 
-
-
-
-
-
-
-
-
 // ================= TYPE DEFINITIONS =====================
 
 //objects (inventory)
@@ -132,14 +116,6 @@ typedef struct galaxy{
 	planet planets[10];
 	star sun, stars[16];
 }galaxy;
-
-
-
-
-
-
-
-
 
 
 
@@ -351,14 +327,6 @@ extern int S2DE_mouseState;
 extern int S2DE_mouseButton;
 extern int S2DE_mouseX;
 extern int S2DE_mouseY;
-
-
-
-
-
-
-
-
 
 
 
@@ -607,177 +575,177 @@ void setSprites(){
 	//yncrea - ISEN
 	yncrea.width = 227;	yncrea.height = 250;
 	yncrea.data = NULL;
-	yncrea = readRGBA2ARVB("Sprites/Yncrea[227x250].rgba",yncrea);
+	yncrea = readRGBA2ARVB("sprites/Yncrea[227x250].rgba",yncrea);
 	ISEN.width = 724; ISEN.height = 200;
 	ISEN.data = NULL;
-	ISEN = readRGBA2ARVB("Sprites/ISEN[724x200].rgba",ISEN);
+	ISEN = readRGBA2ARVB("sprites/ISEN[724x200].rgba",ISEN);
 
 	//fire
 	fire.width = 60; fire.height = 60;
 	fire.data = NULL;
-	fire = readRGBA2ARVB("Sprites/fire[60x60].rgba",fire);
+	fire = readRGBA2ARVB("sprites/fire[60x60].rgba",fire);
 
 	//player
 
 	//playerR
 	playerR_stop.width = 100; playerR_stop.height = 200;
 	playerR_stop.data = NULL;
-	playerR_stop = readRGBA2ARVB("Sprites/playerR_stop[100x200].rgba",playerR_stop);
+	playerR_stop = readRGBA2ARVB("sprites/playerR_stop[100x200].rgba",playerR_stop);
 	playerR_run1.width = 100; playerR_run1.height = 200;
 	playerR_run1.data = NULL;
-	playerR_run1 = readRGBA2ARVB("Sprites/playerR_run1[100x200].rgba",playerR_run1);
+	playerR_run1 = readRGBA2ARVB("sprites/playerR_run1[100x200].rgba",playerR_run1);
 	playerR_run2.width = 100; playerR_run2.height = 200;
 	playerR_run2.data = NULL;
-	playerR_run2 = readRGBA2ARVB("Sprites/playerR_run2[100x200].rgba",playerR_run2);
+	playerR_run2 = readRGBA2ARVB("sprites/playerR_run2[100x200].rgba",playerR_run2);
 
 	//playerL
 	playerL_stop.width = 100; playerL_stop.height = 200;
 	playerL_stop.data = NULL;
-	playerL_stop = readRGBA2ARVB("Sprites/playerL_stop[100x200].rgba",playerL_stop);
+	playerL_stop = readRGBA2ARVB("sprites/playerL_stop[100x200].rgba",playerL_stop);
 	playerL_run1.width = 100; playerL_run1.height = 200;
 	playerL_run1.data = NULL;
-	playerL_run1 = readRGBA2ARVB("Sprites/playerL_run1[100x200].rgba",playerL_run1);
+	playerL_run1 = readRGBA2ARVB("sprites/playerL_run1[100x200].rgba",playerL_run1);
 	playerL_run2.width = 100; playerL_run2.height = 200;
 	playerL_run2.data = NULL;
-	playerL_run2 = readRGBA2ARVB("Sprites/playerL_run2[100x200].rgba",playerL_run2);
+	playerL_run2 = readRGBA2ARVB("sprites/playerL_run2[100x200].rgba",playerL_run2);
 
 	//player with space suit
 
 	//playerSuitR
 	playerSuitR_stop.width = 100; playerSuitR_stop.height = 200;
 	playerSuitR_stop.data = NULL;
-	playerSuitR_stop = readRGBA2ARVB("Sprites/playerSuitR_stop[100x200].rgba",playerSuitR_stop);
+	playerSuitR_stop = readRGBA2ARVB("sprites/playerSuitR_stop[100x200].rgba",playerSuitR_stop);
 	playerSuitR_run1.width = 100; playerSuitR_run1.height = 200;
 	playerSuitR_run1.data = NULL;
-	playerSuitR_run1 = readRGBA2ARVB("Sprites/playerSuitR_run1[100x200].rgba",playerSuitR_run1);
+	playerSuitR_run1 = readRGBA2ARVB("sprites/playerSuitR_run1[100x200].rgba",playerSuitR_run1);
 	playerSuitR_run2.width = 100; playerSuitR_run2.height = 200;
 	playerSuitR_run2.data = NULL;
-	playerSuitR_run2 = readRGBA2ARVB("Sprites/playerSuitR_run2[100x200].rgba",playerSuitR_run2);
+	playerSuitR_run2 = readRGBA2ARVB("sprites/playerSuitR_run2[100x200].rgba",playerSuitR_run2);
 
 	//playerSuitL
 	playerSuitL_stop.width = 100; playerSuitL_stop.height = 200;
 	playerSuitL_stop.data = NULL;
-	playerSuitL_stop = readRGBA2ARVB("Sprites/playerSuitL_stop[100x200].rgba",playerSuitL_stop);
+	playerSuitL_stop = readRGBA2ARVB("sprites/playerSuitL_stop[100x200].rgba",playerSuitL_stop);
 	playerSuitL_run1.width = 100; playerSuitL_run1.height = 200;
 	playerSuitL_run1.data = NULL;
-	playerSuitL_run1 = readRGBA2ARVB("Sprites/playerSuitL_run1[100x200].rgba",playerSuitL_run1);
+	playerSuitL_run1 = readRGBA2ARVB("sprites/playerSuitL_run1[100x200].rgba",playerSuitL_run1);
 	playerSuitL_run2.width = 100; playerSuitL_run2.height = 200;
 	playerSuitL_run2.data = NULL;
-	playerSuitL_run2 = readRGBA2ARVB("Sprites/playerSuitL_run2[100x200].rgba",playerSuitL_run2);
+	playerSuitL_run2 = readRGBA2ARVB("sprites/playerSuitL_run2[100x200].rgba",playerSuitL_run2);
 
 	//icons
 	icon_inv.width = 70; icon_inv.height = 70;
 	icon_inv.data = NULL;
-	icon_inv = readRGBA2ARVB("Sprites/icon_inv[70x70].rgba",icon_inv);
+	icon_inv = readRGBA2ARVB("sprites/icon_inv[70x70].rgba",icon_inv);
 	icon_crafts.width = 70; icon_crafts.height = 70;
 	icon_crafts.data = NULL;
-	icon_crafts = readRGBA2ARVB("Sprites/icon_crafts[70x70].rgba",icon_crafts);
+	icon_crafts = readRGBA2ARVB("sprites/icon_crafts[70x70].rgba",icon_crafts);
 	icon_equip.width = 70; icon_equip.height = 70;
 	icon_equip.data = NULL;
-	icon_equip = readRGBA2ARVB("Sprites/icon_equip[70x70].rgba",icon_equip);
+	icon_equip = readRGBA2ARVB("sprites/icon_equip[70x70].rgba",icon_equip);
 	icon_space.width = 70; icon_space.height = 70;
 	icon_space.data = NULL;
-	icon_space = readRGBA2ARVB("Sprites/icon_space[70x70].rgba",icon_space);
+	icon_space = readRGBA2ARVB("sprites/icon_space[70x70].rgba",icon_space);
 
 	//items
 
 	//tree
 	item_tree.width = 60; item_tree.height = 60;
 	item_tree.data = NULL;
-	item_tree = readRGBA2ARVB("Sprites/item_tree[60x60].rgba",item_tree);
+	item_tree = readRGBA2ARVB("sprites/item_tree[60x60].rgba",item_tree);
 
 	//wood
 	item_wood.width = 60; item_wood.height = 60;
 	item_wood.data = NULL;
-	item_wood = readRGBA2ARVB("Sprites/item_wood[60x60].rgba",item_wood);
+	item_wood = readRGBA2ARVB("sprites/item_wood[60x60].rgba",item_wood);
 
 	//fiber
 	item_fiber.width = 60; item_fiber.height = 60;
 	item_fiber.data = NULL;
-	item_fiber = readRGBA2ARVB("Sprites/item_fiber[60x60].rgba",item_fiber);
+	item_fiber = readRGBA2ARVB("sprites/item_fiber[60x60].rgba",item_fiber);
 
 	//space suit
 	item_space_suit.width = 60; item_space_suit.height = 60;
 	item_space_suit.data = NULL;
-	item_space_suit = readRGBA2ARVB("Sprites/item_space_suit[60x60].rgba",item_space_suit);
+	item_space_suit = readRGBA2ARVB("sprites/item_space_suit[60x60].rgba",item_space_suit);
 
 	//multi tool
 	item_multi_tool.width = 60; item_multi_tool.height = 60;
 	item_multi_tool.data = NULL;
-	item_multi_tool = readRGBA2ARVB("Sprites/item_multi_tool[60x60].rgba",item_multi_tool);
+	item_multi_tool = readRGBA2ARVB("sprites/item_multi_tool[60x60].rgba",item_multi_tool);
 
 	//pickaxe
 	item_pickaxe.width = 60; item_pickaxe.height = 60;
 	item_pickaxe.data = NULL;
-	item_pickaxe = readRGBA2ARVB("Sprites/item_pickaxe[60x60].rgba",item_pickaxe);
+	item_pickaxe = readRGBA2ARVB("sprites/item_pickaxe[60x60].rgba",item_pickaxe);
 
 	//rock
 	item_rock.width = 60; item_rock.height = 60;
 	item_rock.data = NULL;
-	item_rock = readRGBA2ARVB("Sprites/item_rock[60x60].rgba",item_rock);
+	item_rock = readRGBA2ARVB("sprites/item_rock[60x60].rgba",item_rock);
 
 	//iron
 	item_iron.width = 60; item_iron.height = 60;
 	item_iron.data = NULL;
-	item_iron = readRGBA2ARVB("Sprites/item_iron[60x60].rgba",item_iron);
+	item_iron = readRGBA2ARVB("sprites/item_iron[60x60].rgba",item_iron);
 
 	//screwdriver
 	item_screwdriver.width = 60; item_screwdriver.height = 60;
 	item_screwdriver.data = NULL;
-	item_screwdriver = readRGBA2ARVB("Sprites/item_screwdriver[60x60].rgba",item_screwdriver);
+	item_screwdriver = readRGBA2ARVB("sprites/item_screwdriver[60x60].rgba",item_screwdriver);
 
 	//hammer
 	item_hammer.width = 60; item_hammer.height = 60;
 	item_hammer.data = NULL;
-	item_hammer = readRGBA2ARVB("Sprites/item_hammer[60x60].rgba",item_hammer);
+	item_hammer = readRGBA2ARVB("sprites/item_hammer[60x60].rgba",item_hammer);
 
 	//oxygen tank
 	item_oxygen_tank.width = 60; item_oxygen_tank.height = 60;
 	item_oxygen_tank.data = NULL;
-	item_oxygen_tank = readRGBA2ARVB("Sprites/item_oxygen_tank[60x60].rgba",item_oxygen_tank);
+	item_oxygen_tank = readRGBA2ARVB("sprites/item_oxygen_tank[60x60].rgba",item_oxygen_tank);
 
 	//machine_base
 	item_machine_base.width = 60; item_machine_base.height = 60;
 	item_machine_base.data = NULL;
-	item_machine_base = readRGBA2ARVB("Sprites/item_machine_base[60x60].rgba",item_machine_base);
+	item_machine_base = readRGBA2ARVB("sprites/item_machine_base[60x60].rgba",item_machine_base);
 
 	//fuel maker
 	item_fuel_maker.width = 60; item_fuel_maker.height = 60;
 	item_fuel_maker.data = NULL;
-	item_fuel_maker = readRGBA2ARVB("Sprites/item_fuel_maker[60x60].rgba",item_fuel_maker);
+	item_fuel_maker = readRGBA2ARVB("sprites/item_fuel_maker[60x60].rgba",item_fuel_maker);
 
 	//fuel
 	item_fuel.width = 60; item_fuel.height = 60;
 	item_fuel.data = NULL;
-	item_fuel = readRGBA2ARVB("Sprites/item_fuel[60x60].rgba",item_fuel);
+	item_fuel = readRGBA2ARVB("sprites/item_fuel[60x60].rgba",item_fuel);
 
 	//rocket
 	item_rocket.width = 60; item_rocket.height = 60;
 	item_rocket.data = NULL;
-	item_rocket = readRGBA2ARVB("Sprites/item_rocket[60x60].rgba",item_rocket);
+	item_rocket = readRGBA2ARVB("sprites/item_rocket[60x60].rgba",item_rocket);
 
 	//rocket high
 	item_rocket_high.width = 60; item_rocket_high.height = 160;
 	item_rocket_high.data = NULL;
-	item_rocket_high = readRGBA2ARVB("Sprites/item_rocket_high[60x160].rgba",item_rocket_high);
+	item_rocket_high = readRGBA2ARVB("sprites/item_rocket_high[60x160].rgba",item_rocket_high);
 
 	//fruit
 	item_fruit.width = 60; item_fruit.height = 60;
 	item_fruit.data = NULL;
-	item_fruit = readRGBA2ARVB("Sprites/item_fruit[60x60].rgba",item_fruit);
+	item_fruit = readRGBA2ARVB("sprites/item_fruit[60x60].rgba",item_fruit);
 
 	//oxygen generator
 	item_oxygen_generator.width = 60; item_oxygen_generator.height = 60;
 	item_oxygen_generator.data = NULL;
-	item_oxygen_generator = readRGBA2ARVB("Sprites/item_oxygen_generator[60x60].rgba",item_oxygen_generator);
+	item_oxygen_generator = readRGBA2ARVB("sprites/item_oxygen_generator[60x60].rgba",item_oxygen_generator);
 	item_oxygen_generator_tanked.width = 60; item_oxygen_generator_tanked.height = 60;
 	item_oxygen_generator_tanked.data = NULL;
-	item_oxygen_generator_tanked = readRGBA2ARVB("Sprites/item_oxygen_generator_tanked[60x60].rgba",item_oxygen_generator_tanked);
+	item_oxygen_generator_tanked = readRGBA2ARVB("sprites/item_oxygen_generator_tanked[60x60].rgba",item_oxygen_generator_tanked);
 
 	//furniture
 	item_furniture.width = 60; item_furniture.height = 60;
 	item_furniture.data = NULL;
-	item_furniture = readRGBA2ARVB("Sprites/item_furniture[60x60].rgba",item_furniture);
+	item_furniture = readRGBA2ARVB("sprites/item_furniture[60x60].rgba",item_furniture);
 }
 
 img getSprite(int ref){
@@ -1020,14 +988,6 @@ void showCrafts(){
 		*/
 	}
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -2821,14 +2781,6 @@ void MouseMoveMegaSwitch(){
 
 
 
-
-
-
-
-
-
-
-
 // ======================== EXECUTION ===========================
 
 //manage all types of event
@@ -2869,7 +2821,7 @@ void S2DE_event(int event){
 				KeyboardMegaSwitch();
 		break;
 
-		case S2DE_MOUSECLICK:
+		case S2DE_MOUSE_CLICK:
 			if(!starter){
 				if(S2DE_mouseState == S2DE_MOUSE_PRESSED)
 					MouseClickMegaSwitch();
@@ -2878,7 +2830,7 @@ void S2DE_event(int event){
 			}
 		break;
 
-		case S2DE_MOUSEMOVE:
+		case S2DE_MOUSE_MOVE:
 			MouseMoveMegaSwitch();
 		break;
 	}

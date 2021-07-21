@@ -6,11 +6,11 @@ run: SpaceConquest.o S2DE.o
 
 
 #game
-SpaceConquest.o: SpaceConquest.c src/S2DE.h src/img.c
-	gcc -Wall -c SpaceConquest.c -O2 -I/usr/include/GL
+SpaceConquest.o: src/SpaceConquest.c lib/S2DE.h src/img.c
+	gcc -Wall -c src/SpaceConquest.c -O2 -I/usr/include/GL
 
 
 
 #S2DE
-S2DE.o: src/S2DE.c src/S2DE.h
-	gcc -Wall -c src/S2DE.c -O2 -I/usr/include/GL
+S2DE.o: lib/S2DE.c lib/S2DE.h
+	gcc -Wall -c lib/S2DE.c -O2 -I/usr/include/GL
