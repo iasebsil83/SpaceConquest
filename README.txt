@@ -50,7 +50,7 @@ All it requires to run is the glut library (freeglut3-dev
 on linux, should normally work on MacOS systems...)
 
 Anyway, further informations such as versions are
-available in SpaceConquest.c.
+available in src/SpaceConquest.c.
 
 This is a tiny project, the game time is quite limited,
 it was my first big C project.
